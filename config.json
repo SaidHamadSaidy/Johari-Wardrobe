@@ -1,0 +1,29 @@
+{
+  "name": "Johari Market",
+  "whatsapp": "255700000000",
+  "lipaNamba": "[your Lipa Namba]",
+  "pesapalLink": "",
+  "usdRate": 2600,
+  "delivery": [
+    {
+      "area": "Zanzibar (Unguja)",
+      "fee": 3000
+    },
+    {
+      "area": "Pemba",
+      "fee": 6000
+    },
+    {
+      "area": "Dar es Salaam",
+      "fee": 5000
+    },
+    {
+      "area": "Other regions of Tanzania",
+      "fee": 10000
+    },
+    {
+      "area": "International",
+      "fee": null
+    }
+  ]
+}

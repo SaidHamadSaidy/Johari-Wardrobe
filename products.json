@@ -1,0 +1,242 @@
+[
+  {
+    "id": "cloves",
+    "name": "Zanzibar cloves",
+    "cat": "Spices",
+    "price": 8000,
+    "art": "jar",
+    "c": [
+      "#6B3A22",
+      "#C9A44C"
+    ],
+    "bg": "#10263F",
+    "desc": "Whole, sun-dried cloves from Pemba, the island famous for them. A deep aroma for pilau, tea and baking.",
+    "opt": {
+      "label": "Weight",
+      "values": [
+        "100 g",
+        "250 g (+6,000)",
+        "500 g (+14,000)"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "cinnamon",
+    "name": "Cinnamon sticks",
+    "cat": "Spices",
+    "price": 7000,
+    "art": "sticks",
+    "c": [
+      "#8C4A2B",
+      "#C9A44C"
+    ],
+    "bg": "#123D33",
+    "desc": "Hand-rolled cinnamon bark from Zanzibar’s spice farms. Sweet and warm, for chai and desserts.",
+    "opt": {
+      "label": "Weight",
+      "values": [
+        "100 g",
+        "250 g (+5,000)"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "pepper",
+    "name": "Black pepper",
+    "cat": "Spices",
+    "price": 6000,
+    "art": "jar",
+    "c": [
+      "#2B2B2B",
+      "#C9A44C"
+    ],
+    "bg": "#4A1F2A",
+    "desc": "Whole black peppercorns, bold and fresh. Grind just before serving for the finest flavour.",
+    "opt": {
+      "label": "Weight",
+      "values": [
+        "100 g",
+        "250 g (+4,000)"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "giftbox",
+    "name": "The spice gift box",
+    "cat": "Spices",
+    "price": 35000,
+    "art": "box",
+    "c": [
+      "#13708A",
+      "#C9A44C"
+    ],
+    "bg": "#10263F",
+    "desc": "Six island spices presented in one box: cloves, cinnamon, cardamom, black pepper, nutmeg and ginger. A gift of distinction.",
+    "opt": null,
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "basket",
+    "name": "Woven ukili basket",
+    "cat": "Crafts",
+    "price": 25000,
+    "art": "basket",
+    "c": [
+      "#C9A44C",
+      "#8C4A2B"
+    ],
+    "bg": "#0F3D4A",
+    "desc": "Handwoven from palm leaves by women’s groups on Unguja. Each basket is one of a kind.",
+    "opt": {
+      "label": "Size",
+      "values": [
+        "Small",
+        "Medium (+8,000)",
+        "Large (+15,000)"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "bowl",
+    "name": "Carved wooden bowl",
+    "cat": "Crafts",
+    "price": 30000,
+    "art": "bowl",
+    "c": [
+      "#6B3F22",
+      "#C9A44C"
+    ],
+    "bg": "#4A1F2A",
+    "desc": "Carved from a single piece of hardwood by local master craftsmen. For fruit, bread or display.",
+    "opt": null,
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "kanga",
+    "name": "Kanga pair",
+    "cat": "Clothing",
+    "price": 18000,
+    "art": "fabric",
+    "c": [
+      "#8E2A2A",
+      "#C9A44C"
+    ],
+    "bg": "#123D33",
+    "desc": "A matching pair of cotton kangas, each printed with a Swahili saying. To wear, to gift, or to display.",
+    "more": {
+      "Fabric": "100% cotton, printed in East Africa",
+      "Size": "Each piece about 150 × 110 cm",
+      "Care": "Hand wash cold, dry in the shade"
+    },
+    "opt": {
+      "label": "Colour",
+      "values": [
+        "Red and gold",
+        "Blue and white",
+        "Green and yellow"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "kikoi",
+    "name": "Kikoi wrap",
+    "cat": "Clothing",
+    "price": 25000,
+    "art": "fabric",
+    "c": [
+      "#13708A",
+      "#F6F1E7"
+    ],
+    "bg": "#4A1F2A",
+    "desc": "Soft woven cotton kikoi with tasselled ends. A beach wrap, scarf or towel in one.",
+    "more": {
+      "Fabric": "Woven cotton",
+      "Size": "About 170 × 100 cm, tasselled ends",
+      "Care": "Hand or machine wash cold"
+    },
+    "opt": {
+      "label": "Colour",
+      "values": [
+        "Ocean blue",
+        "Sand",
+        "Coral"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "shirt",
+    "name": "Linen shirt",
+    "cat": "Clothing",
+    "price": 45000,
+    "art": "shirt",
+    "c": [
+      "#F6F1E7",
+      "#C9A44C"
+    ],
+    "bg": "#10263F",
+    "desc": "A light linen shirt tailored in Stone Town. Cool in the heat, refined in the evening.",
+    "more": {
+      "Fabric": "Linen",
+      "Fit": "Relaxed fit, see the size guide",
+      "Care": "Machine wash cold, iron while damp"
+    },
+    "opt": {
+      "label": "Size",
+      "values": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  },
+  {
+    "id": "jersey",
+    "name": "Football jersey, your club",
+    "short": "Football jersey",
+    "cat": "Jerseys",
+    "price": 35000,
+    "art": "jersey",
+    "c": [
+      "#13708A",
+      "#E3C878"
+    ],
+    "bg": "#0F3D4A",
+    "desc": "Pre-order a jersey for your club. Tell us the club and any name or number, and we will confirm availability and the final price on WhatsApp before you pay.",
+    "more": {
+      "Fabric": "Breathable football jersey fabric",
+      "Fit": "Standard fit, see the size guide",
+      "Care": "Wash inside out in cold water; do not iron the print",
+      "Note": "Genuine jerseys only; we confirm the exact shirt with you first"
+    },
+    "opt": {
+      "label": "Size",
+      "values": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
+    },
+    "status": "available",
+    "image": ""
+  }
+]
