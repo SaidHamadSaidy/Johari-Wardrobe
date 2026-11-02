@@ -10,126 +10,158 @@
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F4EFE5; --surface:#FFFDF8; --ink:#0A1A2F; --muted:#56606E; --line:#E0D4BC; --navy:#0A1A2F;
+  --bg:#F4EFE5; --surface:#FFFDF8; --ink:#0A1A2F; --muted:#56606E; --line:#E0D4BC; --navy:#0A1A2F; --side:#08172A;
   --gold:#C9A44C; --gold-ink:#7A5E1F; --ok:#1F7A4D; --warn:#9A5B00; --bad:#B3261E; --chip:#EFE6D3;
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --bg:#081322; --surface:#0E1E33; --ink:#F2EBDD; --muted:#A9B3C1; --line:#24364F; --gold-ink:#E3C878; --ok:#7FD6A6; --warn:#F2C14E; --bad:#FFB4AB; --chip:#16294A; color-scheme:dark; }
+  :root:not([data-theme="light"]){ --bg:#081322; --surface:#0E1E33; --ink:#F2EBDD; --muted:#A9B3C1; --line:#24364F; --gold-ink:#E3C878; --ok:#7FD6A6; --warn:#F2C14E; --bad:#FFB4AB; --chip:#16294A; --side:#050D18; color-scheme:dark; }
 }
-:root[data-theme="dark"]{ --bg:#081322; --surface:#0E1E33; --ink:#F2EBDD; --muted:#A9B3C1; --line:#24364F; --gold-ink:#E3C878; --ok:#7FD6A6; --warn:#F2C14E; --bad:#FFB4AB; --chip:#16294A; color-scheme:dark; }
+:root[data-theme="dark"]{ --bg:#081322; --surface:#0E1E33; --ink:#F2EBDD; --muted:#A9B3C1; --line:#24364F; --gold-ink:#E3C878; --ok:#7FD6A6; --warn:#F2C14E; --bad:#FFB4AB; --chip:#16294A; --side:#050D18; color-scheme:dark; }
 *,*::before,*::after{box-sizing:inherit}
 [hidden]{display:none!important}
+html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:1rem;line-height:1.55}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--navy);z-index:60}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--side);z-index:60}
 h1,h2,h3{font-family:"Bodoni Moda",Georgia,serif;font-weight:400;margin:0 0 .5em;line-height:1.1}
-h2{font-size:1.9rem}
+h2{font-size:clamp(1.6rem,3vw,2.1rem)}
+h3{font-size:1.25rem}
 a{color:var(--gold-ink)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.wrap{width:min(1180px,100% - 2rem);margin-inline:auto}
-.muted{color:var(--muted)}
-.small{font-size:.88rem}
-.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-ink)}
+.muted{color:var(--muted)} .small{font-size:.86rem}
+.eyebrow{display:block;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-ink)}
 
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--navy);color:#F2EBDD}
-.bar{display:flex;align-items:center;gap:1rem;min-height:64px;flex-wrap:wrap}
-.brand{font-family:"Bodoni Moda",Georgia,serif;font-size:1.25rem;letter-spacing:.18em;margin-right:auto}
-.brand small{display:block;font-family:"Hanken Grotesk",sans-serif;font-size:.6rem;letter-spacing:.4em;color:#E3C878}
-nav.tabs{display:flex;gap:.2rem;overflow-x:auto}
-nav.tabs button{min-height:44px;padding:0 .9rem;border:0;border-bottom:2px solid transparent;background:none;color:#C9D0DA;font:inherit;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
-nav.tabs button[aria-selected="true"]{color:#F2EBDD;border-color:#C9A44C}
-.sync{font-size:.78rem;color:#C9D0DA}
-.sync b{color:#E3C878;font-weight:600}
+/* shell */
+.shell{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+aside.side{position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px));background:var(--side);color:#D3D9E2;display:flex;flex-direction:column;padding:1.3rem .9rem;overflow:auto}
+.brand{font-family:"Bodoni Moda",Georgia,serif;font-size:1.3rem;letter-spacing:.2em;color:#F2EBDD;padding:0 .6rem 1.3rem}
+.brand small{display:block;font-family:"Hanken Grotesk",sans-serif;font-size:.58rem;letter-spacing:.42em;color:#E3C878;margin-top:.2rem}
+nav.menu{display:grid;gap:.15rem}
+nav.menu button{display:flex;align-items:center;gap:.7rem;min-height:44px;padding:0 .7rem;border:0;border-radius:4px;background:none;color:#C9D0DA;font:inherit;font-size:.95rem;font-weight:500;text-align:left;cursor:pointer}
+nav.menu button svg{flex:none;opacity:.8}
+nav.menu button:hover{background:rgba(255,255,255,.06);color:#F2EBDD}
+nav.menu button[aria-current="page"]{background:rgba(201,164,76,.16);color:#F2EBDD}
+nav.menu button .count{margin-left:auto;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#C9A44C;color:#0A1A2F;font-size:.72rem;font-weight:700;display:grid;place-items:center}
+.side-foot{margin-top:auto;padding:1rem .6rem 0;border-top:1px solid rgba(255,255,255,.08);font-size:.8rem}
+.side-foot a{color:#E3C878;text-decoration:none;display:block;padding:.3rem 0}
+.side-foot b{color:#F2EBDD;font-weight:600}
+main.content{padding:1.6rem clamp(1rem,3vw,2.4rem) 4rem;min-width:0}
+.mobile-top{display:none}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  aside.side{position:sticky;height:auto;padding:.6rem .6rem 0;z-index:30;flex-direction:column}
+  .brand{display:none}
+  nav.menu{display:flex;overflow-x:auto;gap:.2rem;padding-bottom:.6rem}
+  nav.menu button{white-space:nowrap;font-size:.85rem;padding:0 .7rem}
+  nav.menu button svg{display:none}
+  .side-foot{display:none}
+  .mobile-top{display:flex;justify-content:space-between;align-items:center;padding:.4rem .4rem .6rem;color:#F2EBDD;font-family:"Bodoni Moda",Georgia,serif;letter-spacing:.18em}
+  .mobile-top a{font-family:"Hanken Grotesk",sans-serif;letter-spacing:0;font-size:.8rem;color:#E3C878}
+}
 
-main{padding:1.6rem 0 4rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.5rem 1.1rem;border:1px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;border-radius:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.5rem 1.05rem;border:1px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;text-decoration:none;border-radius:2px}
 .btn:hover{background:var(--ink);color:var(--bg)}
 .btn.gold{background:var(--gold);border-color:var(--gold);color:#0A1A2F}
 .btn.gold:hover{filter:brightness(1.08);background:var(--gold);color:#0A1A2F}
 .btn.danger{border-color:var(--bad);color:var(--bad)}
 .btn.danger:hover{background:var(--bad);color:#fff}
+.btn.sm{min-height:36px;padding:.3rem .7rem;font-size:.7rem}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
-.toolbar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
-
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.8rem}
-.stat{background:var(--surface);border:1px solid var(--line);padding:1.1rem 1.2rem}
-.stat b{display:block;font-family:"Bodoni Moda",Georgia,serif;font-weight:400;font-size:1.9rem;line-height:1.1;margin:.3rem 0 .1rem}
-.panel{background:var(--surface);border:1px solid var(--line);padding:1.2rem 1.3rem;margin-bottom:1.4rem}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
-@media (max-width:860px){.two{grid-template-columns:1fr}}
+.toolbar{display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-end;justify-content:space-between;margin-bottom:1.3rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1.4rem}
+.stat{background:var(--surface);border:1px solid var(--line);padding:1rem 1.15rem}
+.stat b{display:block;font-family:"Bodoni Moda",Georgia,serif;font-weight:400;font-size:1.75rem;line-height:1.1;margin:.35rem 0 .15rem}
+.delta{font-size:.8rem;font-weight:700}
+.delta.up{color:var(--ok)} .delta.down{color:var(--bad)}
+.panel{background:var(--surface);border:1px solid var(--line);padding:1.15rem 1.25rem;margin-bottom:1.3rem;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem}
+.panel-head h3{margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+.grid21{display:grid;grid-template-columns:2fr 1fr;gap:1.3rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media (max-width:1000px){.grid2,.grid21{grid-template-columns:1fr}}
+@media (max-width:640px){.g2,.g3{grid-template-columns:1fr}}
 
 table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:.7rem .6rem;border-bottom:1px solid var(--line);vertical-align:middle}
-th{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+th,td{text-align:left;padding:.65rem .55rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 td.num,th.num{text-align:right;white-space:nowrap}
+tr.click{cursor:pointer}
+tr.click:hover td{background:color-mix(in srgb,var(--gold) 7%,transparent)}
 .tscroll{overflow-x:auto}
-.thumb{width:48px;height:58px;display:grid;place-items:center;overflow:hidden;border-radius:2px}
+.thumb{width:44px;height:54px;display:grid;place-items:center;overflow:hidden;border-radius:2px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
-.thumb span{font-size:.6rem;font-weight:700;letter-spacing:.1em;color:#E3C878}
-
-.pill{display:inline-block;padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--chip);white-space:nowrap}
+.thumb span{font-size:.56rem;font-weight:700;letter-spacing:.08em;color:#E3C878}
+.pill{display:inline-block;padding:.18rem .6rem;border-radius:999px;font-size:.74rem;font-weight:700;background:var(--chip);white-space:nowrap}
 .pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chips button{min-height:38px;padding:0 .8rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:.82rem;font-weight:600;cursor:pointer}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.todo{display:grid;gap:.5rem}
+.todo button{display:flex;align-items:center;gap:.8rem;width:100%;min-height:52px;padding:.6rem .9rem;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.todo button:hover{border-color:var(--gold)}
+.todo b{font-family:"Bodoni Moda",Georgia,serif;font-size:1.4rem;font-weight:400;min-width:2ch}
+.todo .go{margin-left:auto;color:var(--gold-ink);font-weight:700}
+.bars{display:grid;gap:.7rem}
+.bar{display:grid;grid-template-columns:minmax(90px,30%) 1fr auto;gap:.8rem;align-items:center;font-size:.92rem}
+.bar i{display:block;height:12px;background:linear-gradient(90deg,var(--gold),#E3C878);border-radius:2px;min-width:2px}
+.chart svg{display:block;width:100%;height:auto}
+.chart .ax{fill:var(--muted);font-size:11px;font-family:"Hanken Grotesk",sans-serif}
+.note{padding:.9rem 1rem;border-left:3px solid var(--gold);background:color-mix(in srgb,var(--gold) 8%,var(--surface));font-size:.92rem}
+.timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:.2rem 0 .7rem 1rem;font-size:.9rem}
+.timeline li::before{content:"";position:absolute;left:-6px;top:.55rem;width:10px;height:10px;border-radius:50%;background:var(--gold)}
 
-label{display:grid;gap:.3rem;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+label{display:grid;gap:.3rem;font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
 label .hint{font-size:.8rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
-input,select,textarea{font:inherit;font-size:1rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:.6rem .7rem;width:100%;min-height:44px}
+input,select,textarea{font:inherit;font-size:1rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:.55rem .7rem;width:100%;min-height:44px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
-textarea{min-height:90px;resize:vertical}
+textarea{min-height:88px;resize:vertical}
 input[type="color"]{padding:2px;height:44px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
-@media (max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+input[type="checkbox"]{width:22px;height:22px;min-height:0}
 .form{display:grid;gap:1rem}
+.cell-in{min-height:38px;padding:.35rem .5rem;max-width:120px}
 
-dialog{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0;width:min(760px,calc(100% - 1.5rem));max-height:calc(100% - 1.5rem);overflow:auto;border-radius:2px}
+dialog{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0;width:min(780px,calc(100% - 1.5rem));max-height:calc(100% - 1.5rem);overflow:auto;border-radius:2px}
 dialog::backdrop{background:rgba(5,12,22,.65)}
 .dhead{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.3rem;background:var(--navy);color:#F2EBDD}
-.dhead h3{margin:0;font-size:1.4rem}
+.dhead h3{margin:0}
 .dhead button{width:44px;height:44px;border:1px solid rgba(227,200,120,.6);background:none;color:#F2EBDD;font-size:1.2rem;cursor:pointer}
 .dbody{padding:1.3rem}
 .dfoot{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;padding:1rem 1.3rem;background:var(--surface);border-top:1px solid var(--line)}
 .preview{width:120px;height:150px;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;background:var(--bg)}
 .preview img{width:100%;height:100%;object-fit:cover}
-.items td{padding:.45rem .4rem}
+.items td{padding:.4rem .35rem}
 .items input{min-height:38px;padding:.35rem .5rem}
-
-.setup{max-width:640px;margin:3rem auto}
-.steps{padding-left:1.2rem}
-.steps li{margin-bottom:.5rem}
+.setup{max-width:640px;margin:2rem auto}
 .toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,200%);background:var(--navy);color:#F2EBDD;border:1px solid var(--gold);padding:.85rem 1.3rem;max-width:calc(100% - 2rem);transition:transform .4s;z-index:90}
 .toast.show{transform:translate(-50%,0)}
 .toast.err{border-color:var(--bad)}
-.empty{padding:2rem;text-align:center;color:var(--muted)}
+.empty{padding:1.6rem;text-align:center;color:var(--muted)}
+.banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.8rem;padding:.8rem 1rem;margin-bottom:1.2rem;background:color-mix(in srgb,var(--gold) 14%,var(--surface));border:1px solid var(--gold)}
 @media (max-width:700px){
   .mobile-cards thead{display:none}
-  .mobile-cards tr{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.8rem 0;border-bottom:1px solid var(--line)}
+  .mobile-cards tr{display:grid;grid-template-columns:1fr auto;gap:.15rem .8rem;padding:.75rem 0;border-bottom:1px solid var(--line)}
   .mobile-cards td{border:0;padding:.1rem 0}
   .mobile-cards td.num{text-align:left}
 }
+@media print{aside.side,.toolbar .row,.btn{display:none!important}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="wrap bar">
+<div class="shell">
+  <aside class="side" id="side" hidden>
+    <div class="mobile-top"><span>JOHARI</span><a id="mStore" href="index.html" target="_blank" rel="noopener">View store ↗</a></div>
     <div class="brand">JOHARI<small>OPERATIONS</small></div>
-    <nav class="tabs" role="tablist" aria-label="Sections" id="tabs" hidden>
-      <button role="tab" data-tab="dash" aria-selected="true">Dashboard</button>
-      <button role="tab" data-tab="orders" aria-selected="false">Orders</button>
-      <button role="tab" data-tab="products" aria-selected="false">Products</button>
-      <button role="tab" data-tab="customers" aria-selected="false">Customers</button>
-      <button role="tab" data-tab="settings" aria-selected="false">Settings</button>
-    </nav>
-    <span class="sync" id="sync"></span>
-  </div>
-</header>
-
-<main class="wrap" id="main"></main>
+    <nav class="menu" id="menu" aria-label="Sections"></nav>
+    <div class="side-foot" id="sideFoot"></div>
+  </aside>
+  <main class="content" id="main"></main>
+</div>
 
 <dialog id="dlg" aria-labelledby="dlgTitle">
   <div class="dhead"><h3 id="dlgTitle"></h3><button id="dlgX" aria-label="Close">×</button></div>
@@ -140,30 +172,43 @@ dialog::backdrop{background:rgba(5,12,22,.65)}
 
 <script>
 /* ============================================================
-   Johari Operations
-   Products and settings are published to your PUBLIC store repository
-   (products.json, config.json, images/). Orders are kept in a separate
-   PRIVATE repository (orders.json), so customer details are never public.
+   Johari Operations: the back office for Johari Market.
+   Products, stock, discounts and settings are published to your PUBLIC
+   store repository (products.json, config.json, images/). Orders and
+   customer details live in your PRIVATE repository (orders.json).
    Your access key stays only in this browser.
    ============================================================ */
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const tzs = n => "TSh " + Math.round(+n || 0).toLocaleString("en-US");
+const short = n => { n = +n || 0; return n >= 1e6 ? (n/1e6).toFixed(n >= 1e7 ? 0 : 1) + "M" : n >= 1e3 ? Math.round(n/1e3) + "k" : String(Math.round(n)); };
 const num = v => +String(v ?? "").replace(/[^\d.-]/g, "") || 0;
+const day = d => (d || "").slice(0,10);
+const today = () => new Date().toISOString().slice(0,10);
 const STATUSES = ["New","Confirmed","Paid","Sourcing","Out for delivery","Delivered","Cancelled"];
 const PAID = ["Paid","Sourcing","Out for delivery","Delivered"];
 const ART = { jar:"Spice jar", sticks:"Cinnamon sticks", box:"Gift box", basket:"Basket", bowl:"Bowl", fabric:"Fabric (kanga, kikoi)", shirt:"Shirt", jersey:"Jersey" };
 const KEY = "johari-ops";
+const ICON = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  orders:'<path d="M6 3h12l1 18H5zM9 7a3 3 0 0 0 6 0"/>',
+  products:'<path d="M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10"/>',
+  inventory:'<path d="M4 4h16v5H4zM5 9v11h14V9M10 13h4"/>',
+  discounts:'<path d="M20 12l-8 8-9-9V3h8zM7.5 7.5h.01"/>',
+  customers:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>',
+  analytics:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>'
+};
+const SECTIONS = [["home","Home"],["orders","Orders"],["products","Products"],["inventory","Inventory"],["discounts","Discounts"],["customers","Customers"],["analytics","Analytics"],["settings","Settings"]];
 
-let S = load(KEY, null);                 // connection settings
+let S = load(KEY, null);
 let D = { products:[], config:null, orders:[], sha:{} };
 let dirty = { products:false, config:false };
-let tab = "dash", orderFilter = "All", orderSearch = "";
+let tab = "home", orderFilter = "All", orderSearch = "", range = 30;
 
 function load(k, d){ try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch(e){ return d; } }
 function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
-let tt; function toast(msg, err){ const t = $("toast"); t.textContent = msg; t.classList.toggle("err", !!err); t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), 3600); }
-function syncNote(){ $("sync").innerHTML = S ? (S.mode === "github" ? `Connected to <b>${esc(S.user)}/${esc(S.repo)}</b>` : `<b>This device only</b>`) : ""; }
+let tt; function toast(msg, err){ const t = $("toast"); t.textContent = msg; t.classList.toggle("err", !!err); t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), 3800); }
 
 /* ---------- GitHub storage ---------- */
 const enc = s => btoa(unescape(encodeURIComponent(s)));
@@ -174,28 +219,28 @@ async function ghGet(repo, path){
   const r = await fetch(gh(repo, path) + "?ref=" + encodeURIComponent(S.branch || "main") + "&t=" + Date.now(), { headers:H(), cache:"no-store" });
   if (r.status === 404) return { text:null, sha:null };
   if (!r.ok) throw new Error(await errText(r));
-  const j = await r.json();
-  return { text:dec(j.content), sha:j.sha };
+  const j = await r.json(); return { text:dec(j.content), sha:j.sha };
 }
 async function ghPut(repo, path, b64, sha, message){
-  const body = { message, content:b64, branch:S.branch || "main" };
-  if (sha) body.sha = sha;
+  const body = { message, content:b64, branch:S.branch || "main" }; if (sha) body.sha = sha;
   const r = await fetch(gh(repo, path), { method:"PUT", headers:{ ...H(), "Content-Type":"application/json" }, body:JSON.stringify(body) });
   if (!r.ok) throw new Error(await errText(r));
   return (await r.json()).content.sha;
 }
 async function errText(r){
   let m = ""; try { m = (await r.json()).message || ""; } catch(e){}
-  if (r.status === 401) return "Your access key was refused. Check it in Settings.";
+  if (r.status === 401) return "Your access key was refused. It may have expired; create a new one and update it in Settings.";
   if (r.status === 403) return "GitHub refused the change (" + m + "). Check the key has Contents: Read and write on both repositories.";
   if (r.status === 404) return "Repository not found. Check the names in Settings.";
-  if (r.status === 409) return "Someone saved a newer version. Reload and try again.";
+  if (r.status === 409) return "A newer version was saved elsewhere. Reload the page and try again.";
   return "GitHub error " + r.status + (m ? ": " + m : "");
 }
+function download(name, text, type){ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type:type || "application/json" })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+function defaultConfig(){ return { name:"Johari Market", whatsapp:"255700000000", lipaNamba:"", pesapalLink:"", usdRate:2600, delivery:[{ area:"Zanzibar (Unguja)", fee:3000 }], discounts:[] }; }
+function saveLocal(){ if (S.mode !== "github") save(KEY + "-data", { products:D.products, config:D.config, orders:D.orders }); }
 
-/* ---------- load everything ---------- */
 async function loadAll(){
-  $("main").innerHTML = `<p class="empty">Loading…</p>`;
+  $("main").innerHTML = `<p class="empty">Loading your business…</p>`;
   try {
     if (S.mode === "github"){
       const [p, c, o] = await Promise.all([ghGet(S.repo, "products.json"), ghGet(S.repo, "config.json"), ghGet(S.dataRepo, "orders.json")]);
@@ -211,23 +256,21 @@ async function loadAll(){
         D.orders = [];
       }
     }
-    $("tabs").hidden = false; syncNote(); render();
+    D.config.discounts = D.config.discounts || [];
+    $("side").hidden = false; buildMenu(); render();
   } catch(e){
     $("main").innerHTML = `<div class="panel setup"><h2>Couldn’t connect</h2><p>${esc(e.message)}</p><div class="row"><button class="btn gold" id="retry">Try again</button><button class="btn" id="reset">Change connection</button></div></div>`;
-    $("retry").onclick = loadAll; $("reset").onclick = () => { S = null; save(KEY, null); setup(); };
+    $("retry").onclick = loadAll; $("reset").onclick = () => setup();
   }
 }
-function defaultConfig(){ return { name:"Johari Market", whatsapp:"255700000000", lipaNamba:"", pesapalLink:"", usdRate:2600, delivery:[{ area:"Zanzibar (Unguja)", fee:3000 }] }; }
-function saveLocal(){ if (S.mode !== "github") save(KEY + "-data", { products:D.products, config:D.config, orders:D.orders }); }
-
-async function publishProducts(){
-  if (S.mode !== "github"){ download("products.json", JSON.stringify(D.products, null, 2)); dirty.products = false; saveLocal(); render(); toast("products.json downloaded. Upload it to your store repository to publish."); return; }
-  try { D.sha.products = await ghPut(S.repo, "products.json", enc(JSON.stringify(D.products, null, 2)), D.sha.products, "Update products from Johari Operations"); dirty.products = false; render(); toast("Published. Your store updates in about a minute."); }
-  catch(e){ toast(e.message, true); }
+async function publishProducts(quiet){
+  if (S.mode !== "github"){ saveLocal(); if (!quiet){ download("products.json", JSON.stringify(D.products, null, 2)); toast("products.json downloaded. Upload it to your store repository to publish."); } dirty.products = quiet ? dirty.products : false; render(); return true; }
+  try { D.sha.products = await ghPut(S.repo, "products.json", enc(JSON.stringify(D.products, null, 2)), D.sha.products, "Update products from Johari Operations"); dirty.products = false; render(); if (!quiet) toast("Published. Your store updates in about 2 minutes."); return true; }
+  catch(e){ toast(e.message, true); return false; }
 }
 async function publishConfig(){
   if (S.mode !== "github"){ download("config.json", JSON.stringify(D.config, null, 2)); dirty.config = false; saveLocal(); render(); toast("config.json downloaded. Upload it to your store repository to publish."); return; }
-  try { D.sha.config = await ghPut(S.repo, "config.json", enc(JSON.stringify(D.config, null, 2)), D.sha.config, "Update store settings from Johari Operations"); dirty.config = false; render(); toast("Settings published. Live in about a minute."); }
+  try { D.sha.config = await ghPut(S.repo, "config.json", enc(JSON.stringify(D.config, null, 2)), D.sha.config, "Update store settings from Johari Operations"); dirty.config = false; render(); toast("Published. Live in about 2 minutes."); }
   catch(e){ toast(e.message, true); }
 }
 async function saveOrders(msg){
@@ -235,71 +278,115 @@ async function saveOrders(msg){
   try { D.sha.orders = await ghPut(S.dataRepo, "orders.json", enc(JSON.stringify(D.orders, null, 2)), D.sha.orders, msg || "Update orders"); return true; }
   catch(e){ toast(e.message, true); return false; }
 }
-function download(name, text, type){ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type:type || "application/json" })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
 
 /* ---------- setup ---------- */
 function setup(){
-  $("tabs").hidden = true; syncNote();
+  $("side").hidden = true;
   const s = S || {};
   $("main").innerHTML = `
   <div class="setup">
     <span class="eyebrow">Welcome</span><h2>Connect your store</h2>
-    <p class="muted">Enter your GitHub details once. Your access key is saved only in this browser, so use your own phone or computer, and press “Sign out” on shared devices.</p>
+    <p class="muted">Enter these once. Your access key is saved only in this browser, so use your own phone or computer.</p>
     <div class="panel form">
-      <label>GitHub username<input id="sUser" value="${esc(s.user || "")}" autocomplete="username" placeholder="for example johari-tz"></label>
-      <div class="grid2">
-        <label>Store repository (public)<input id="sRepo" value="${esc(s.repo || "johari-market")}"></label>
-        <label>Orders repository (private)<input id="sData" value="${esc(s.dataRepo || "johari-orders")}"></label>
-      </div>
-      <label>Access key (fine-grained personal access token)<input id="sToken" type="password" value="${esc(s.token || "")}" autocomplete="off" placeholder="github_pat_…"><span class="hint">Needs “Contents: Read and write” on both repositories. See the README for the 2-minute steps.</span></label>
+      <div class="g2"><label>Your first name<input id="sOwner" value="${esc(s.owner || "")}" placeholder="Said"></label>
+      <label>GitHub username<input id="sUser" value="${esc(s.user || "")}" autocomplete="username"></label></div>
+      <div class="g2"><label>Store repository (public)<input id="sRepo" value="${esc(s.repo || "johari-market")}"></label>
+        <label>Orders repository (private)<input id="sData" value="${esc(s.dataRepo || "johari-orders")}"></label></div>
+      <label>Access key<input id="sToken" type="password" value="${esc(s.token || "")}" autocomplete="off" placeholder="github_pat_…"><span class="hint">Fine-grained token with “Contents: Read and write” on both repositories.</span></label>
       <label>Branch<input id="sBranch" value="${esc(s.branch || "main")}"></label>
-      <div class="row"><button class="btn gold" id="sGo">Connect</button><button class="btn" id="sLocal">Use without GitHub (this device only)</button></div>
+      <div class="row"><button class="btn gold" id="sGo">Connect</button><button class="btn" id="sLocal">Try it on this device only</button></div>
     </div>
   </div>`;
-  $("sGo").onclick = async () => {
-    const n = { mode:"github", user:$("sUser").value.trim(), repo:$("sRepo").value.trim(), dataRepo:$("sData").value.trim(), token:$("sToken").value.trim(), branch:$("sBranch").value.trim() || "main" };
+  $("sGo").onclick = () => {
+    const n = { mode:"github", owner:$("sOwner").value.trim(), user:$("sUser").value.trim(), repo:$("sRepo").value.trim(), dataRepo:$("sData").value.trim(), token:$("sToken").value.trim(), branch:$("sBranch").value.trim() || "main" };
     if (!n.user || !n.repo || !n.dataRepo || !n.token) return toast("Please fill in all the fields.", true);
     S = n; save(KEY, S); loadAll();
   };
-  $("sLocal").onclick = () => { S = { mode:"local" }; save(KEY, S); loadAll(); };
+  $("sLocal").onclick = () => { S = { mode:"local", owner:$("sOwner").value.trim() }; save(KEY, S); loadAll(); };
 }
 
-/* ---------- tabs ---------- */
-$("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); });
+/* ---------- navigation ---------- */
+function buildMenu(){
+  const pending = D.orders.filter(o => ["New","Confirmed"].includes(o.status)).length;
+  $("menu").innerHTML = SECTIONS.map(([k,l]) => `<button data-tab="${k}" ${k === tab ? 'aria-current="page"' : ""}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>${l}${k === "orders" && pending ? `<span class="count" aria-label="${pending} need attention">${pending}</span>` : ""}</button>`).join("");
+  $("menu").querySelectorAll("button").forEach(b => b.onclick = () => { tab = b.dataset.tab; buildMenu(); render(); scrollTo(0,0); });
+  $("sideFoot").innerHTML = `<a href="index.html" target="_blank" rel="noopener">View store ↗</a><a href="business.html" target="_blank" rel="noopener">View business site ↗</a><div style="margin-top:.6rem">${S.mode === "github" ? `Connected to <b>${esc(S.user)}</b>` : "<b>This device only</b>"}</div>`;
+}
 addEventListener("beforeunload", e => { if (dirty.products || dirty.config){ e.preventDefault(); e.returnValue = ""; } });
 function render(){
-  $("tabs").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
-  ({ dash:renderDash, orders:renderOrders, products:renderProducts, customers:renderCustomers, settings:renderSettings })[tab]();
+  const pub = (dirty.products || dirty.config) ? `<div class="banner"><span><b>You have unpublished changes</b> to ${[dirty.products && "products", dirty.config && "settings or discounts"].filter(Boolean).join(" and ")}.</span><div class="row">${dirty.products ? `<button class="btn gold sm" id="bPubP">Publish products</button>` : ""}${dirty.config ? `<button class="btn gold sm" id="bPubC">Publish settings</button>` : ""}</div></div>` : "";
+  ({ home:renderHome, orders:renderOrders, products:renderProducts, inventory:renderInventory, discounts:renderDiscounts, customers:renderCustomers, analytics:renderAnalytics, settings:renderSettings })[tab]();
+  if (pub){ $("main").insertAdjacentHTML("afterbegin", pub); if ($("bPubP")) $("bPubP").onclick = () => publishProducts(); if ($("bPubC")) $("bPubC").onclick = publishConfig; }
 }
 
-/* ---------- dashboard ---------- */
-function renderDash(){
-  const now = new Date(), ym = now.toISOString().slice(0,7);
-  const month = D.orders.filter(o => (o.date || "").slice(0,7) === ym);
-  const paidMonth = month.filter(o => PAID.includes(o.status));
-  const awaiting = D.orders.filter(o => ["New","Confirmed"].includes(o.status));
-  const toDeliver = D.orders.filter(o => ["Paid","Sourcing","Out for delivery"].includes(o.status));
-  const live = D.products.filter(p => p.status !== "hidden"), sold = D.products.filter(p => p.status === "sold_out");
-  const top = {}; D.orders.filter(o => PAID.includes(o.status)).forEach(o => (o.items || []).forEach(i => top[i.name] = (top[i.name] || 0) + (+i.qty || 0)));
-  const topList = Object.entries(top).sort((a,b) => b[1] - a[1]).slice(0,5);
-  const recent = [...D.orders].sort((a,b) => (b.date || "").localeCompare(a.date || "")).slice(0,6);
-  $("main").innerHTML = `
-    <div class="toolbar"><div><span class="eyebrow">${now.toLocaleDateString("en-GB",{ month:"long", year:"numeric" })}</span><h2>Dashboard</h2></div><button class="btn gold" id="dNew">New order</button></div>
-    <div class="cards">
-      <div class="stat"><span class="eyebrow">Sales this month</span><b>${tzs(paidMonth.reduce((s,o) => s + num(o.total), 0))}</b><span class="muted small">${paidMonth.length} paid order${paidMonth.length === 1 ? "" : "s"}</span></div>
-      <div class="stat"><span class="eyebrow">Orders this month</span><b>${month.length}</b><span class="muted small">all statuses</span></div>
-      <div class="stat"><span class="eyebrow">Awaiting payment</span><b>${awaiting.length}</b><span class="muted small">${tzs(awaiting.reduce((s,o) => s + num(o.total), 0))} to collect</span></div>
-      <div class="stat"><span class="eyebrow">To source and deliver</span><b>${toDeliver.length}</b><span class="muted small">paid, not yet delivered</span></div>
-      <div class="stat"><span class="eyebrow">Products</span><b>${live.length}</b><span class="muted small">live, ${sold.length} sold out</span></div>
-    </div>
-    <div class="two">
-      <div class="panel"><h3>Recent orders</h3>${recent.length ? `<table class="mobile-cards"><tbody>${recent.map(o => `<tr><td><b>${esc(o.id)}</b> · ${esc(o.name || "—")}<br><span class="muted small">${fmtDate(o.date)}</span></td><td class="num">${tzs(o.total)}<br>${statusPill(o.status)}</td></tr>`).join("")}</tbody></table>` : `<p class="empty">No orders yet. When a WhatsApp order arrives, press “New order” and paste it in.</p>`}</div>
-      <div class="panel"><h3>Best sellers</h3>${topList.length ? `<table><tbody>${topList.map(([n,q]) => `<tr><td>${esc(n)}</td><td class="num">${q} sold</td></tr>`).join("")}</tbody></table>` : `<p class="empty">Best sellers appear here once orders are paid.</p>`}</div>
-    </div>`;
-  $("dNew").onclick = () => editOrder(null);
+/* ---------- helpers for numbers ---------- */
+const findProduct = name => D.products.find(p => p.name === name || p.short === name);
+const itemCost = i => { const p = findProduct(i.name); return p && p.cost ? p.cost * (+i.qty || 0) : 0; };
+const paidOrders = list => list.filter(o => PAID.includes(o.status));
+const revenue = list => paidOrders(list).reduce((s,o) => s + num(o.total), 0);
+const inRange = (o, days) => { if (!days) return true; const d = new Date(o.date); return (Date.now() - d.getTime()) / 864e5 < days; };
+function series(list, days){
+  const out = [], map = {};
+  paidOrders(list).forEach(o => { const k = day(o.date); map[k] = (map[k] || 0) + num(o.total); });
+  for (let i = days - 1; i >= 0; i--){ const d = new Date(Date.now() - i * 864e5).toISOString().slice(0,10); out.push({ label:d, value:map[d] || 0 }); }
+  return out;
+}
+function lineChart(pts){
+  const W = 640, Hh = 220, pad = { l:46, r:12, t:14, b:28 };
+  const max = Math.max(1, ...pts.map(p => p.value)), n = pts.length;
+  const x = i => pad.l + (W - pad.l - pad.r) * (n === 1 ? .5 : i / (n - 1)), y = v => pad.t + (Hh - pad.t - pad.b) * (1 - v / max);
+  const line = pts.map((p,i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(p.value).toFixed(1)}`).join(" ");
+  const area = line + ` L${x(n-1).toFixed(1)} ${Hh - pad.b} L${x(0).toFixed(1)} ${Hh - pad.b} Z`;
+  const lab = d => new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short" });
+  const ticks = [0, .5, 1].map(f => `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(max*f)}" y2="${y(max*f)}" stroke="currentColor" stroke-opacity=".12"/><text class="ax" x="${pad.l - 6}" y="${y(max*f) + 4}" text-anchor="end">${short(max*f)}</text>`).join("");
+  const dots = pts.map((p,i) => p.value ? `<circle cx="${x(i)}" cy="${y(p.value)}" r="3.5" fill="#C9A44C"><title>${lab(p.label)}: ${tzs(p.value)}</title></circle>` : "").join("");
+  return `<div class="chart" role="img" aria-label="Sales per day, highest ${tzs(max)}"><svg viewBox="0 0 ${W} ${Hh}"><defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#C9A44C" stop-opacity=".35"/><stop offset="1" stop-color="#C9A44C" stop-opacity="0"/></linearGradient></defs>${ticks}<path d="${area}" fill="url(#ga)"/><path d="${line}" fill="none" stroke="#C9A44C" stroke-width="2.5" stroke-linejoin="round"/>${dots}<text class="ax" x="${x(0)}" y="${Hh - 8}">${lab(pts[0].label)}</text><text class="ax" x="${x(n-1)}" y="${Hh - 8}" text-anchor="end">${lab(pts[n-1].label)}</text></svg></div>`;
+}
+function bars(list, fmt){
+  if (!list.length) return `<p class="empty">Nothing yet.</p>`;
+  const max = Math.max(...list.map(x => x[1]), 1);
+  return `<div class="bars">${list.map(([l,v]) => `<div class="bar"><span>${esc(l)}</span><i style="width:${(v/max*100).toFixed(1)}%"></i><span class="small">${fmt ? fmt(v) : v}</span></div>`).join("")}</div>`;
 }
 const fmtDate = d => d ? new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }) : "";
 function statusPill(s){ const cls = s === "Delivered" || s === "Paid" ? "ok" : s === "Cancelled" ? "bad" : s === "New" ? "warn" : ""; return `<span class="pill ${cls}">${esc(s)}</span>`; }
+const lowStock = () => D.products.filter(p => typeof p.stock === "number" && p.stock <= (p.lowAt ?? 3) && p.status !== "hidden");
+
+/* ---------- home ---------- */
+function renderHome(){
+  const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  const ym = new Date().toISOString().slice(0,7), lastYm = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 15).toISOString().slice(0,7);
+  const month = D.orders.filter(o => (o.date || "").slice(0,7) === ym), last = D.orders.filter(o => (o.date || "").slice(0,7) === lastYm);
+  const rev = revenue(month), revLast = revenue(last);
+  const todayOrders = D.orders.filter(o => day(o.date) === today());
+  const awaiting = D.orders.filter(o => ["New","Confirmed"].includes(o.status));
+  const toDeliver = D.orders.filter(o => ["Paid","Sourcing","Out for delivery"].includes(o.status));
+  const low = lowStock();
+  const delta = revLast ? Math.round((rev - revLast) / revLast * 100) : null;
+  const recent = [...D.orders].sort((a,b) => (b.date || "").localeCompare(a.date || "")).slice(0,6);
+  $("main").innerHTML = `
+    <div class="toolbar"><div><span class="eyebrow">${new Date().toLocaleDateString("en-GB",{ weekday:"long", day:"numeric", month:"long" })}</span><h2>${hi}${S.owner ? ", " + esc(S.owner) : ""}.</h2></div><button class="btn gold" id="hNew">New order</button></div>
+    <div class="cards">
+      <div class="stat"><span class="eyebrow">Sales this month</span><b>${tzs(rev)}</b>${delta === null ? `<span class="muted small">${paidOrders(month).length} paid orders</span>` : `<span class="delta ${delta >= 0 ? "up" : "down"}">${delta >= 0 ? "▲" : "▼"} ${Math.abs(delta)}% vs last month</span>`}</div>
+      <div class="stat"><span class="eyebrow">Orders today</span><b>${todayOrders.length}</b><span class="muted small">${month.length} this month</span></div>
+      <div class="stat"><span class="eyebrow">Money to collect</span><b>${tzs(awaiting.reduce((s,o) => s + num(o.total), 0))}</b><span class="muted small">${awaiting.length} unpaid orders</span></div>
+      <div class="stat"><span class="eyebrow">Gross profit this month</span><b>${tzs(paidOrders(month).reduce((s,o) => s + num(o.total) - num(o.delivery) - (o.items || []).reduce((c,i) => c + itemCost(i), 0), 0))}</b><span class="muted small">add cost prices in Inventory</span></div>
+    </div>
+    <div class="grid21">
+      <div class="panel"><div class="panel-head"><h3>Sales, last 30 days</h3><button class="btn sm" data-go="analytics">Analytics</button></div>${lineChart(series(D.orders, 30))}</div>
+      <div class="panel"><h3>To do</h3><div class="todo">
+        <button data-go="orders" data-f="New"><b>${D.orders.filter(o => o.status === "New").length}</b> new orders to confirm<span class="go">→</span></button>
+        <button data-go="orders" data-f="Confirmed"><b>${D.orders.filter(o => o.status === "Confirmed").length}</b> waiting for payment<span class="go">→</span></button>
+        <button data-go="orders" data-f="Paid"><b>${toDeliver.length}</b> to source and deliver<span class="go">→</span></button>
+        <button data-go="inventory"><b>${low.length}</b> products low on stock<span class="go">→</span></button>
+      </div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Recent orders</h3><button class="btn sm" data-go="orders">All orders</button></div>
+      ${recent.length ? `<div class="tscroll"><table class="mobile-cards"><tbody>${recent.map(o => `<tr class="click" data-o="${esc(o.id)}"><td><b>${esc(o.id)}</b><br><span class="muted small">${fmtDate(o.date)}</span></td><td>${esc(o.name || "—")}<br><span class="muted small">${esc(o.area || "")}</span></td><td class="num">${tzs(o.total)}</td><td>${statusPill(o.status)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">No orders yet. When a WhatsApp order arrives, press “New order” and paste it in.</p>`}
+    </div>`;
+  $("hNew").onclick = () => editOrder(null);
+  $("main").querySelectorAll("[data-go]").forEach(b => b.onclick = () => { tab = b.dataset.go; if (b.dataset.f) orderFilter = b.dataset.f; buildMenu(); render(); });
+  $("main").querySelectorAll("[data-o]").forEach(r => r.onclick = () => editOrder(D.orders.find(o => o.id === r.dataset.o)));
+}
 
 /* ---------- orders ---------- */
 function renderOrders(){
@@ -316,11 +403,11 @@ function renderOrders(){
       ${list.length ? `<div class="tscroll"><table class="mobile-cards"><thead><tr><th>Order</th><th>Customer</th><th>Area</th><th class="num">Total</th><th>Status</th><th></th></tr></thead><tbody>
         ${list.map(o => `<tr>
           <td><b>${esc(o.id)}</b><br><span class="muted small">${fmtDate(o.date)}</span></td>
-          <td>${esc(o.name || "—")}<br><span class="small">${o.phone ? `<a href="https://wa.me/${esc(o.phone.replace(/\D/g,""))}" target="_blank" rel="noopener">${esc(o.phone)}</a>` : ""}</span></td>
+          <td>${esc(o.name || "—")}<br><span class="small">${o.phone ? `<a href="https://wa.me/${esc(String(o.phone).replace(/\D/g,""))}" target="_blank" rel="noopener">${esc(o.phone)}</a>` : ""}</span></td>
           <td class="small">${esc(o.area || "")}</td>
           <td class="num">${tzs(o.total)}${o.payRef ? `<br><span class="muted small">${esc(o.payRef)}</span>` : ""}</td>
           <td><select data-st="${esc(o.id)}" aria-label="Status of ${esc(o.id)}">${STATUSES.map(s => `<option ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select></td>
-          <td><button class="btn" data-ed="${esc(o.id)}">Open</button></td></tr>`).join("")}
+          <td><button class="btn sm" data-ed="${esc(o.id)}">Open</button></td></tr>`).join("")}
       </tbody></table></div>` : `<p class="empty">No orders match.</p>`}
     </div>`;
   $("oNew").onclick = () => editOrder(null);
@@ -331,126 +418,146 @@ function renderOrders(){
   $("main").querySelectorAll("[data-st]").forEach(sel => sel.onchange = async () => {
     const o = D.orders.find(x => x.id === sel.dataset.st); const prev = o.status; o.status = sel.value;
     (o.history = o.history || []).push({ at:new Date().toISOString(), status:o.status });
-    if (await saveOrders(`${o.id}: ${prev} → ${o.status}`)) toast(`${o.id} is now ${o.status}.`); else { o.status = prev; renderOrders(); }
+    const stockChanged = applyStock(o);
+    if (await saveOrders(`${o.id}: ${prev} → ${o.status}`)){ toast(`${o.id} is now ${o.status}.`); if (stockChanged) publishProducts(true); buildMenu(); }
+    else { o.status = prev; renderOrders(); }
   });
 }
+/* stock goes down when an order is paid, and back up if it is cancelled */
+function applyStock(o){
+  let changed = false;
+  const adjust = sign => (o.items || []).forEach(i => { const p = findProduct(i.name); if (p && typeof p.stock === "number"){ p.stock = Math.max(0, p.stock + sign * (+i.qty || 0)); changed = true; } });
+  if (PAID.includes(o.status) && !o.stockDone){ adjust(-1); o.stockDone = true; }
+  else if (o.status === "Cancelled" && o.stockDone){ adjust(1); o.stockDone = false; }
+  if (changed){ dirty.products = true; saveLocal(); }
+  return changed;
+}
 function nextId(){ const n = D.orders.reduce((m,o) => Math.max(m, +(String(o.id).match(/\d+/) || [0])[0]), 0) + 1; return "JM-" + String(n).padStart(4, "0"); }
-
-/* parse the order message the store sends on WhatsApp */
 function parseOrder(text){
   const o = { items:[] }, lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  const grab = (re) => { const l = lines.find(x => re.test(x)); return l ? l.replace(re, "").trim() : ""; };
+  const grab = re => { const l = lines.find(x => re.test(x)); return l ? l.replace(re, "").trim() : ""; };
   lines.forEach(l => {
     const m = l.match(/^[•\-*]\s*(.+?)\s+x(\d+)\s*=\s*TSh\s*([\d,]+)/i);
     if (m){ let full = m[1], name = full, opt = ""; if (full.endsWith(")")){ const k = full.lastIndexOf(" ("); if (k > 0){ name = full.slice(0,k); opt = full.slice(k+2, -1); } } o.items.push({ name, opt, qty:+m[2], total:num(m[3]) }); }
   });
   o.subtotal = num(grab(/^Subtotal:\s*/i));
-  const del = lines.find(l => /^Delivery\s*\(/i.test(l)) || "";
-  const dm = del.match(/^Delivery\s*\((.*?)\):\s*(.*)$/i);
+  const dl = lines.find(l => /^Discount\s*\(/i.test(l)); if (dl){ const m = dl.match(/^Discount\s*\((.*?)\):\s*-?\s*TSh\s*([\d,]+)/i); if (m){ o.discountCode = m[1]; o.discount = num(m[2]); } }
+  const del = lines.find(l => /^Delivery\s*\(/i.test(l)) || "", dm = del.match(/^Delivery\s*\((.*?)\):\s*(.*)$/i);
   if (dm){ o.area = dm[1] === "-" ? "" : dm[1]; o.delivery = /quote/i.test(dm[2]) ? 0 : num(dm[2]); }
-  o.total = num(grab(/^Total:\s*/i)) || (o.subtotal + (o.delivery || 0));
+  o.total = num(grab(/^Total:\s*/i)) || (o.subtotal - (o.discount || 0) + (o.delivery || 0));
   o.name = grab(/^Name:\s*/i); o.phone = grab(/^Phone:\s*/i);
-  const a = grab(/^Address:\s*/i), n = grab(/^Note:\s*/i);
-  o.address = a === "-" ? "" : a; o.note = n === "-" ? "" : n;
+  const a = grab(/^Address:\s*/i), n = grab(/^Note:\s*/i); o.address = a === "-" ? "" : a; o.note = n === "-" ? "" : n;
   return o;
 }
 function editOrder(o){
   const isNew = !o;
-  const w = o ? JSON.parse(JSON.stringify(o)) : { id:nextId(), date:new Date().toISOString(), status:"New", items:[], subtotal:0, delivery:0, total:0 };
+  const w = o ? JSON.parse(JSON.stringify(o)) : { id:nextId(), date:new Date().toISOString(), status:"New", items:[], subtotal:0, delivery:0, discount:0, total:0 };
   $("dlgTitle").textContent = isNew ? "New order " + w.id : "Order " + w.id;
-  const itemsRows = () => w.items.map((i,k) => `<tr><td><input data-i="${k}" data-k="name" value="${esc(i.name)}" aria-label="Item"></td><td><input data-i="${k}" data-k="opt" value="${esc(i.opt || "")}" aria-label="Option"></td><td style="width:70px"><input data-i="${k}" data-k="qty" type="number" min="1" value="${esc(i.qty)}" aria-label="Quantity"></td><td style="width:120px"><input data-i="${k}" data-k="total" inputmode="numeric" value="${esc(i.total)}" aria-label="Line total"></td><td><button class="btn danger" data-rm="${k}" aria-label="Remove item">×</button></td></tr>`).join("");
+  const itemsRows = () => w.items.map((i,k) => `<tr><td><input data-i="${k}" data-k="name" value="${esc(i.name)}" list="plist" aria-label="Item"></td><td><input data-i="${k}" data-k="opt" value="${esc(i.opt || "")}" aria-label="Option"></td><td style="width:70px"><input data-i="${k}" data-k="qty" type="number" min="1" value="${esc(i.qty)}" aria-label="Quantity"></td><td style="width:120px"><input data-i="${k}" data-k="total" inputmode="numeric" value="${esc(i.total)}" aria-label="Line total"></td><td><button class="btn danger sm" data-rm="${k}" aria-label="Remove item">×</button></td></tr>`).join("");
   $("dlgBody").innerHTML = `
     <div class="form">
-      ${isNew ? `<label>Paste the WhatsApp order<textarea id="oPaste" placeholder="Paste the full message the customer sent from the store"></textarea><span class="hint">The items, totals, name, phone and address fill in automatically.</span></label><div><button class="btn" id="oParse">Fill in from message</button></div>` : ""}
-      <div class="grid2"><label>Customer name<input id="oName" value="${esc(w.name || "")}"></label><label>Phone<input id="oPhone" type="tel" value="${esc(w.phone || "")}"></label></div>
-      <div class="grid2"><label>Delivery area<input id="oArea" list="areas" value="${esc(w.area || "")}"><datalist id="areas">${(D.config.delivery || []).map(d => `<option value="${esc(d.area)}">`).join("")}</datalist></label><label>Address or pickup point<input id="oAddr" value="${esc(w.address || "")}"></label></div>
-      <div><span class="eyebrow">Items</span>
+      ${isNew ? `<label>Paste the WhatsApp order<textarea id="oPaste" placeholder="Paste the full message the customer sent from the store"></textarea><span class="hint">Items, totals, discount, name, phone and address fill in automatically.</span></label><div><button class="btn" id="oParse">Fill in from message</button></div>` : ""}
+      <div class="g2"><label>Customer name<input id="oName" value="${esc(w.name || "")}"></label><label>Phone<input id="oPhone" type="tel" value="${esc(w.phone || "")}"></label></div>
+      <div class="g2"><label>Delivery area<input id="oArea" list="areas" value="${esc(w.area || "")}"><datalist id="areas">${(D.config.delivery || []).map(d => `<option value="${esc(d.area)}">`).join("")}</datalist></label><label>Address or pickup point<input id="oAddr" value="${esc(w.address || "")}"></label></div>
+      <div><span class="eyebrow">Items</span><datalist id="plist">${D.products.map(p => `<option value="${esc(p.name)}">`).join("")}</datalist>
         <div class="tscroll"><table class="items"><thead><tr><th>Item</th><th>Option</th><th>Qty</th><th>Total (TSh)</th><th></th></tr></thead><tbody id="oItems">${itemsRows()}</tbody></table></div>
-        <button class="btn" id="oAddItem" style="margin-top:.6rem">Add item</button></div>
-      <div class="grid3"><label>Delivery fee (TSh)<input id="oDel" inputmode="numeric" value="${esc(w.delivery || 0)}"></label><label>Total (TSh)<input id="oTotal" inputmode="numeric" value="${esc(w.total || 0)}"><span class="hint" id="oCalc"></span></label><label>Status<select id="oStatus">${STATUSES.map(s => `<option ${s === w.status ? "selected" : ""}>${s}</option>`).join("")}</select></label></div>
-      <div class="grid2"><label>Payment method<select id="oPay">${["","M-Pesa","Airtel Money","Mixx by Yas","Card (Pesapal)","Cash","Bank transfer"].map(m => `<option ${m === (w.payMethod || "") ? "selected" : ""} value="${m}">${m || "Not paid yet"}</option>`).join("")}</select></label><label>Payment reference<input id="oRef" value="${esc(w.payRef || "")}" placeholder="for example the M-Pesa code"></label></div>
+        <button class="btn sm" id="oAddItem" style="margin-top:.6rem">Add item</button></div>
+      <div class="g3"><label>Discount (TSh)<input id="oDisc" inputmode="numeric" value="${esc(w.discount || 0)}"><span class="hint">${w.discountCode ? "Code " + esc(w.discountCode) : ""}</span></label><label>Delivery fee (TSh)<input id="oDel" inputmode="numeric" value="${esc(w.delivery || 0)}"></label><label>Total (TSh)<input id="oTotal" inputmode="numeric" value="${esc(w.total || 0)}"><span class="hint" id="oCalc"></span></label></div>
+      <div class="g3"><label>Status<select id="oStatus">${STATUSES.map(s => `<option ${s === w.status ? "selected" : ""}>${s}</option>`).join("")}</select></label><label>Payment method<select id="oPay">${["","M-Pesa","Airtel Money","Mixx by Yas","Card (Pesapal)","Cash","Bank transfer"].map(m => `<option ${m === (w.payMethod || "") ? "selected" : ""} value="${m}">${m || "Not paid yet"}</option>`).join("")}</select></label><label>Payment reference<input id="oRef" value="${esc(w.payRef || "")}" placeholder="e.g. M-Pesa code"></label></div>
       <label>Notes<textarea id="oNote">${esc(w.note || "")}</textarea></label>
-      ${w.history && w.history.length ? `<p class="muted small">History: ${w.history.map(h => `${fmtDate(h.at)} ${esc(h.status)}`).join(" · ")}</p>` : ""}
+      ${w.history && w.history.length ? `<div><span class="eyebrow">History</span><ul class="timeline">${w.history.map(h => `<li>${fmtDate(h.at)} · ${esc(h.status)}</li>`).join("")}</ul></div>` : ""}
     </div>`;
   const readItems = () => { $("oItems").querySelectorAll("input").forEach(inp => { const it = w.items[+inp.dataset.i]; if (!it) return; const k = inp.dataset.k; it[k] = k === "qty" || k === "total" ? num(inp.value) : inp.value; }); };
-  const calc = () => { readItems(); const sub = w.items.reduce((s,i) => s + num(i.total), 0); $("oCalc").textContent = `Items ${tzs(sub)} + delivery ${tzs(num($("oDel").value))} = ${tzs(sub + num($("oDel").value))}`; };
-  const bindItems = () => {
-    $("oItems").querySelectorAll("input").forEach(i => i.oninput = calc);
-    $("oItems").querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { readItems(); w.items.splice(+b.dataset.rm, 1); $("oItems").innerHTML = itemsRows(); bindItems(); calc(); });
-  };
-  bindItems(); calc();
-  $("oDel").oninput = calc;
+  const calc = () => { readItems(); const sub = w.items.reduce((s,i) => s + num(i.total), 0); $("oCalc").textContent = `Items ${tzs(sub)} − ${tzs(num($("oDisc").value))} + ${tzs(num($("oDel").value))} = ${tzs(sub - num($("oDisc").value) + num($("oDel").value))}`; };
+  const bindItems = () => { $("oItems").querySelectorAll("input").forEach(i => i.oninput = calc); $("oItems").querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { readItems(); w.items.splice(+b.dataset.rm, 1); $("oItems").innerHTML = itemsRows(); bindItems(); calc(); }); };
+  bindItems(); calc(); $("oDel").oninput = calc; $("oDisc").oninput = calc;
   $("oAddItem").onclick = () => { readItems(); w.items.push({ name:"", opt:"", qty:1, total:0 }); $("oItems").innerHTML = itemsRows(); bindItems(); calc(); };
   if (isNew) $("oParse").onclick = () => {
     const p = parseOrder($("oPaste").value);
     if (!p.items.length && !p.name) return toast("I couldn’t read that message. Paste the full order text from WhatsApp.", true);
-    Object.assign(w, { items:p.items, area:p.area || w.area });
+    Object.assign(w, { items:p.items, area:p.area || w.area, discountCode:p.discountCode || "" });
     $("oName").value = p.name || ""; $("oPhone").value = p.phone || ""; $("oArea").value = p.area || ""; $("oAddr").value = p.address || ""; $("oNote").value = p.note || "";
-    $("oDel").value = p.delivery || 0; $("oTotal").value = p.total || 0;
+    $("oDel").value = p.delivery || 0; $("oDisc").value = p.discount || 0; $("oTotal").value = p.total || 0;
     $("oItems").innerHTML = itemsRows(); bindItems(); calc(); toast("Order filled in. Check it, then save.");
   };
-  $("dlgFoot").innerHTML = `<div class="row">${isNew ? "" : `<button class="btn danger" id="oDelBtn">Delete</button>`}${!isNew && w.phone ? `<a class="btn" target="_blank" rel="noopener" href="https://wa.me/${esc(String(w.phone).replace(/\D/g,""))}?text=${encodeURIComponent(`Hello ${w.name || ""}, this is ${D.config.name}. Your order ${w.id} is now: ${w.status}.`)}">Message customer</a>` : ""}</div><button class="btn gold" id="oSave">Save order</button>`;
+  const waLink = () => `https://wa.me/${esc(String(w.phone || "").replace(/\D/g,""))}?text=${encodeURIComponent(`Hello ${w.name || ""}, this is ${D.config.name}. Your order ${w.id} is now: ${w.status}.`)}`;
+  $("dlgFoot").innerHTML = `<div class="row">${isNew ? "" : `<button class="btn danger" id="oDelBtn">Delete</button><button class="btn" id="oPrint">Print receipt</button>`}${!isNew && w.phone ? `<a class="btn" target="_blank" rel="noopener" href="${waLink()}">Message customer</a>` : ""}</div><button class="btn gold" id="oSave">Save order</button>`;
   $("oSave").onclick = async () => {
     readItems();
     const prev = o ? o.status : null;
-    Object.assign(w, { name:$("oName").value.trim(), phone:$("oPhone").value.trim(), area:$("oArea").value.trim(), address:$("oAddr").value.trim(), delivery:num($("oDel").value), total:num($("oTotal").value), status:$("oStatus").value, payMethod:$("oPay").value, payRef:$("oRef").value.trim(), note:$("oNote").value.trim() });
+    Object.assign(w, { name:$("oName").value.trim(), phone:$("oPhone").value.trim(), area:$("oArea").value.trim(), address:$("oAddr").value.trim(), delivery:num($("oDel").value), discount:num($("oDisc").value), total:num($("oTotal").value), status:$("oStatus").value, payMethod:$("oPay").value, payRef:$("oRef").value.trim(), note:$("oNote").value.trim() });
     w.items = w.items.filter(i => i.name);
     w.subtotal = w.items.reduce((s,i) => s + num(i.total), 0);
-    if (!w.total) w.total = w.subtotal + w.delivery;
+    if (!w.total) w.total = w.subtotal - w.discount + w.delivery;
     if (prev !== w.status) (w.history = w.history || []).push({ at:new Date().toISOString(), status:w.status });
-    const backup = JSON.stringify(D.orders);
+    const backup = JSON.stringify(D.orders), prodBackup = JSON.stringify(D.products);
+    const stockChanged = applyStock(w);
     if (isNew) D.orders.push(w); else D.orders[D.orders.findIndex(x => x.id === w.id)] = w;
-    if (await saveOrders((isNew ? "New order " : "Update ") + w.id)){ $("dlg").close(); render(); toast(`Order ${w.id} saved.`); }
-    else D.orders = JSON.parse(backup);
+    if (await saveOrders((isNew ? "New order " : "Update ") + w.id)){ $("dlg").close(); buildMenu(); render(); toast(`Order ${w.id} saved.`); if (stockChanged) publishProducts(true); }
+    else { D.orders = JSON.parse(backup); D.products = JSON.parse(prodBackup); }
   };
-  if (!isNew) $("oDelBtn").onclick = async () => {
-    if (!confirm(`Delete order ${w.id}? This can’t be undone.`)) return;
-    const backup = JSON.stringify(D.orders);
-    D.orders = D.orders.filter(x => x.id !== w.id);
-    if (await saveOrders("Delete " + w.id)){ $("dlg").close(); render(); toast(`Order ${w.id} deleted.`); } else D.orders = JSON.parse(backup);
-  };
+  if (!isNew){
+    $("oDelBtn").onclick = async () => {
+      if (!confirm(`Delete order ${w.id}? This can’t be undone.`)) return;
+      const backup = JSON.stringify(D.orders);
+      D.orders = D.orders.filter(x => x.id !== w.id);
+      if (await saveOrders("Delete " + w.id)){ $("dlg").close(); buildMenu(); render(); toast(`Order ${w.id} deleted.`); } else D.orders = JSON.parse(backup);
+    };
+    $("oPrint").onclick = () => printReceipt(o);
+  }
   $("dlg").showModal();
 }
-function exportCsv(){
-  const rows = [["Order","Date","Status","Customer","Phone","Area","Address","Items","Delivery","Total","Payment","Reference","Notes"]];
-  D.orders.forEach(o => rows.push([o.id, (o.date || "").slice(0,10), o.status, o.name, o.phone, o.area, o.address, (o.items || []).map(i => `${i.qty} x ${i.name}${i.opt ? " (" + i.opt + ")" : ""}`).join("; "), o.delivery, o.total, o.payMethod, o.payRef, o.note]));
-  download("johari-orders-" + new Date().toISOString().slice(0,10) + ".csv", rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv");
+function printReceipt(o){
+  const c = D.config, win = window.open("", "_blank");
+  if (!win) return toast("Allow pop-ups to print receipts.", true);
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Receipt ${esc(o.id)}</title><style>
+    body{font-family:Georgia,serif;color:#0A1A2F;max-width:640px;margin:2rem auto;padding:0 1.2rem}
+    h1{letter-spacing:.3em;font-weight:400;margin:0}small{letter-spacing:.3em;color:#7A5E1F}
+    .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #C9A44C;padding-bottom:1rem;margin-bottom:1.2rem}
+    table{width:100%;border-collapse:collapse;margin:1rem 0;font-family:Arial,sans-serif;font-size:.95rem}td,th{padding:.5rem;border-bottom:1px solid #ddd;text-align:left}td:last-child,th:last-child{text-align:right}
+    .tot td{border:0}.grand td{font-size:1.15rem;font-weight:bold;border-top:2px solid #0A1A2F}
+    p{font-family:Arial,sans-serif;font-size:.92rem;margin:.2rem 0}.foot{margin-top:2rem;text-align:center;color:#7A5E1F}
+  </style></head><body>
+  <div class="top"><div><h1>JOHARI</h1><small>MARKET</small></div><div style="text-align:right;font-family:Arial,sans-serif"><b>Receipt ${esc(o.id)}</b><br>${fmtDate(o.date)}</div></div>
+  <p><b>${esc(o.name || "")}</b></p><p>${esc(o.phone || "")}</p><p>${esc([o.address, o.area].filter(Boolean).join(", "))}</p>
+  <table><thead><tr><th>Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>
+  ${(o.items || []).map(i => `<tr><td>${esc(i.name)}${i.opt ? " (" + esc(i.opt) + ")" : ""}</td><td>${esc(i.qty)}</td><td>${tzs(i.total)}</td></tr>`).join("")}
+  <tr class="tot"><td colspan="2">Subtotal</td><td>${tzs(o.subtotal)}</td></tr>
+  ${o.discount ? `<tr class="tot"><td colspan="2">Discount${o.discountCode ? " (" + esc(o.discountCode) + ")" : ""}</td><td>−${tzs(o.discount)}</td></tr>` : ""}
+  <tr class="tot"><td colspan="2">Delivery</td><td>${tzs(o.delivery)}</td></tr>
+  <tr class="grand"><td colspan="2">Total</td><td>${tzs(o.total)}</td></tr></tbody></table>
+  <p>Status: <b>${esc(o.status)}</b>${o.payMethod ? " · Paid by " + esc(o.payMethod) : ""}${o.payRef ? " · Ref " + esc(o.payRef) : ""}</p>
+  <p class="foot">Asante for shopping with ${esc(c.name)}.${c.whatsapp ? "<br>WhatsApp +" + esc(c.whatsapp) : ""}</p>
+  <script>setTimeout(()=>print(),300)<\/script></body></html>`);
+  win.document.close();
 }
-
-/* ---------- customers ---------- */
-function renderCustomers(){
-  const by = {};
-  D.orders.forEach(o => { const k = (o.phone || o.name || "unknown").replace(/\s/g, ""); const c = by[k] = by[k] || { name:o.name, phone:o.phone, area:o.area, orders:0, spent:0, last:"" }; c.orders++; if (PAID.includes(o.status)) c.spent += num(o.total); if ((o.date || "") > c.last){ c.last = o.date; c.name = o.name || c.name; c.area = o.area || c.area; } });
-  const list = Object.values(by).sort((a,b) => b.spent - a.spent);
-  $("main").innerHTML = `
-    <div class="toolbar"><div><span class="eyebrow">${list.length} customers</span><h2>Customers</h2></div></div>
-    <div class="panel">${list.length ? `<div class="tscroll"><table class="mobile-cards"><thead><tr><th>Name</th><th>Phone</th><th>Area</th><th class="num">Orders</th><th class="num">Spent</th><th>Last order</th></tr></thead><tbody>
-      ${list.map(c => `<tr><td><b>${esc(c.name || "—")}</b></td><td>${c.phone ? `<a href="https://wa.me/${esc(c.phone.replace(/\D/g,""))}" target="_blank" rel="noopener">${esc(c.phone)}</a>` : ""}</td><td class="small">${esc(c.area || "")}</td><td class="num">${c.orders}</td><td class="num">${tzs(c.spent)}</td><td class="small">${fmtDate(c.last)}</td></tr>`).join("")}
-    </tbody></table></div>` : `<p class="empty">Customers appear here from your orders.</p>`}</div>`;
+function exportCsv(){
+  const rows = [["Order","Date","Status","Customer","Phone","Area","Address","Items","Discount","Delivery","Total","Payment","Reference","Notes"]];
+  D.orders.forEach(o => rows.push([o.id, day(o.date), o.status, o.name, o.phone, o.area, o.address, (o.items || []).map(i => `${i.qty} x ${i.name}${i.opt ? " (" + i.opt + ")" : ""}`).join("; "), o.discount || 0, o.delivery, o.total, o.payMethod, o.payRef, o.note]));
+  download("johari-orders-" + today() + ".csv", rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv");
 }
 
 /* ---------- products ---------- */
+const imgSrc = path => /^(https?:|data:)/.test(path) ? path : (S.mode === "github" ? `https://raw.githubusercontent.com/${S.user}/${S.repo}/${S.branch || "main"}/${path}` : path);
+const slug = s => String(s).toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").slice(0,40) || "product";
+function stockLabel(p){ if (typeof p.stock !== "number") return `<span class="muted small">Unlimited</span>`; if (p.stock === 0) return `<span class="pill bad">Out of stock</span>`; if (p.stock <= (p.lowAt ?? 3)) return `<span class="pill warn">${p.stock} left</span>`; return `${p.stock}`; }
 function renderProducts(){
   $("main").innerHTML = `
     <div class="toolbar"><div><span class="eyebrow">${D.products.length} products</span><h2>Products</h2></div>
       <div class="row"><button class="btn" id="pAdd">Add product</button><button class="btn gold" id="pPub" ${dirty.products ? "" : "disabled"}>${S.mode === "github" ? "Publish to store" : "Download products.json"}</button></div></div>
-    ${dirty.products ? `<p class="panel small"><b>You have unpublished changes.</b> Press “${S.mode === "github" ? "Publish to store" : "Download products.json"}” when you’re ready.</p>` : ""}
-    <div class="panel"><div class="tscroll"><table class="mobile-cards"><thead><tr><th></th><th>Product</th><th>Category</th><th class="num">Price</th><th>Status</th><th></th></tr></thead><tbody>
+    <div class="panel"><div class="tscroll"><table class="mobile-cards"><thead><tr><th></th><th>Product</th><th>Category</th><th class="num">Price</th><th>Stock</th><th>Status</th><th></th></tr></thead><tbody>
       ${D.products.map((p,i) => `<tr>
         <td><div class="thumb" style="background:${esc(p.bg || "#10263F")}">${p.image ? `<img src="${esc(imgSrc(p.image))}" alt="">` : `<span>${esc((p.art || "").toUpperCase().slice(0,4))}</span>`}</div></td>
         <td><b>${esc(p.name)}</b><br><span class="muted small">${p.opt ? esc(p.opt.label) + ": " + esc(p.opt.values.length) + " options" : "No options"}</span></td>
-        <td class="small">${esc(p.cat)}</td>
-        <td class="num">${tzs(p.price)}</td>
+        <td class="small">${esc(p.cat)}</td><td class="num">${tzs(p.price)}</td><td>${stockLabel(p)}</td>
         <td><select data-ps="${i}" aria-label="Status of ${esc(p.name)}"><option value="available" ${(p.status || "available") === "available" ? "selected" : ""}>Available</option><option value="sold_out" ${p.status === "sold_out" ? "selected" : ""}>Sold out</option><option value="hidden" ${p.status === "hidden" ? "selected" : ""}>Hidden</option></select></td>
-        <td><button class="btn" data-pe="${i}">Edit</button></td></tr>`).join("")}
+        <td><button class="btn sm" data-pe="${i}">Edit</button></td></tr>`).join("")}
     </tbody></table></div></div>`;
   $("pAdd").onclick = () => editProduct(-1);
-  $("pPub").onclick = publishProducts;
+  $("pPub").onclick = () => publishProducts();
   $("main").querySelectorAll("[data-pe]").forEach(b => b.onclick = () => editProduct(+b.dataset.pe));
-  $("main").querySelectorAll("[data-ps]").forEach(s => s.onchange = () => { D.products[+s.dataset.ps].status = s.value; dirty.products = true; saveLocal(); renderProducts(); });
+  $("main").querySelectorAll("[data-ps]").forEach(s => s.onchange = () => { D.products[+s.dataset.ps].status = s.value; dirty.products = true; saveLocal(); render(); });
 }
-const imgSrc = path => /^(https?:|data:)/.test(path) ? path : (S.mode === "github" ? `https://raw.githubusercontent.com/${S.user}/${S.repo}/${S.branch || "main"}/${path}` : path);
-function slug(s){ return String(s).toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").slice(0,40) || "product"; }
 function editProduct(i){
   const isNew = i < 0;
   const p = isNew ? { id:"", name:"", cat:"Spices", price:0, art:"box", c:["#13708A","#C9A44C"], bg:"#10263F", desc:"", opt:null, status:"available", image:"" } : JSON.parse(JSON.stringify(D.products[i]));
@@ -459,38 +566,38 @@ function editProduct(i){
   $("dlgTitle").textContent = isNew ? "Add product" : "Edit " + p.name;
   $("dlgBody").innerHTML = `
     <div class="form">
-      <div class="grid2"><label>Name<input id="fName" value="${esc(p.name)}"></label><label>Short name (optional)<input id="fShort" value="${esc(p.short || "")}"><span class="hint">Used on hangers and small labels.</span></label></div>
-      <div class="grid3"><label>Category<input id="fCat" list="cats" value="${esc(p.cat)}"><datalist id="cats">${cats.map(c => `<option value="${esc(c)}">`).join("")}</datalist><span class="hint">Clothing and Jerseys appear in the wardrobe.</span></label>
+      <div class="g2"><label>Name<input id="fName" value="${esc(p.name)}"></label><label>Short name (optional)<input id="fShort" value="${esc(p.short || "")}"><span class="hint">Used on hangers and small labels.</span></label></div>
+      <div class="g3"><label>Category<input id="fCat" list="cats" value="${esc(p.cat)}"><datalist id="cats">${cats.map(c => `<option value="${esc(c)}">`).join("")}</datalist><span class="hint">Clothing and Jerseys hang on the 3D rail.</span></label>
         <label>Price (TSh)<input id="fPrice" inputmode="numeric" value="${esc(p.price)}"></label>
         <label>Status<select id="fStatus"><option value="available">Available</option><option value="sold_out">Sold out</option><option value="hidden">Hidden</option></select></label></div>
+      <div class="g3"><label>Cost price (TSh)<input id="fCost" inputmode="numeric" value="${esc(p.cost || "")}"><span class="hint">What it costs you. Private use for profit reports.</span></label>
+        <label>Stock<input id="fStock" inputmode="numeric" value="${typeof p.stock === "number" ? p.stock : ""}" placeholder="Unlimited"><span class="hint">Leave empty for pre-order items.</span></label>
+        <label>Warn when stock is at<input id="fLow" inputmode="numeric" value="${esc(p.lowAt ?? 3)}"></label></div>
       <label>Description<textarea id="fDesc">${esc(p.desc)}</textarea></label>
-      <div class="grid2"><label>Option name<input id="fOptL" value="${esc(p.opt ? p.opt.label : "")}" placeholder="Size, Weight or Colour (leave empty if none)"></label>
-        <label>Options, one per line<textarea id="fOptV" placeholder="S&#10;M&#10;L">${esc(p.opt ? p.opt.values.join("\n") : "")}</textarea><span class="hint">For an extra price, write it like: 250 g (+6,000)</span></label></div>
+      <div class="g2"><label>Option name<input id="fOptL" value="${esc(p.opt ? p.opt.label : "")}" placeholder="Size, Weight or Colour (empty if none)"></label>
+        <label>Options, one per line<textarea id="fOptV" placeholder="S&#10;M&#10;L">${esc(p.opt ? p.opt.values.join("\n") : "")}</textarea><span class="hint">For an extra price write: 250 g (+6,000)</span></label></div>
       <label>Details, one per line (optional)<textarea id="fMore" placeholder="Fabric: Linen&#10;Care: Machine wash cold">${esc(p.more ? Object.entries(p.more).map(([k,v]) => k + ": " + v).join("\n") : "")}</textarea></label>
       <div class="row" style="align-items:flex-start;gap:1.2rem">
         <div class="preview" id="fPrev" style="background:${esc(p.bg)}">${p.image ? `<img src="${esc(imgSrc(p.image))}" alt="">` : `<span class="small muted">No photo</span>`}</div>
-        <div class="form" style="flex:1;min-width:220px">
-          <label>Photo<input id="fImg" type="file" accept="image/*"><span class="hint">Square or portrait photos look best. Large photos are resized automatically.</span></label>
-          ${p.image ? `<button class="btn" id="fNoImg">Remove photo</button>` : ""}
-        </div>
+        <div class="form" style="flex:1;min-width:220px"><label>Photo<input id="fImg" type="file" accept="image/*"><span class="hint">Portrait photos on a plain background look best. Resized automatically.</span></label>${p.image ? `<button class="btn sm" id="fNoImg">Remove photo</button>` : ""}</div>
       </div>
       <details><summary class="eyebrow" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Drawing used when there’s no photo</summary>
-        <div class="grid3" style="margin-top:.6rem"><label>Drawing<select id="fArt">${Object.entries(ART).map(([k,v]) => `<option value="${k}" ${k === p.art ? "selected" : ""}>${v}</option>`).join("")}</select></label>
+        <div class="g3" style="margin-top:.6rem"><label>Drawing<select id="fArt">${Object.entries(ART).map(([k,v]) => `<option value="${k}" ${k === p.art ? "selected" : ""}>${v}</option>`).join("")}</select></label>
           <label>Main colour<input id="fC1" type="color" value="${esc(p.c[0])}"></label><label>Accent colour<input id="fC2" type="color" value="${esc(p.c[1])}"></label></div>
         <label style="margin-top:1rem">Background colour<input id="fBg" type="color" value="${esc(p.bg)}"></label>
       </details>
     </div>`;
   $("fStatus").value = p.status || "available";
-  $("fImg").onchange = async e => {
-    const f = e.target.files[0]; if (!f) return;
-    try { newImage = await resize(f, 1400, .84); $("fPrev").innerHTML = `<img src="${newImage}" alt="">`; } catch(err){ toast("That photo couldn’t be read. Try a JPG or PNG.", true); }
-  };
+  $("fImg").onchange = async e => { const f = e.target.files[0]; if (!f) return; try { newImage = await resize(f, 1400, .84); $("fPrev").innerHTML = `<img src="${newImage}" alt="">`; } catch(err){ toast("That photo couldn’t be read. Try a JPG or PNG.", true); } };
   if (p.image) $("fNoImg").onclick = () => { p.image = ""; newImage = null; $("fPrev").innerHTML = `<span class="small muted">No photo</span>`; };
   $("dlgFoot").innerHTML = `<div class="row">${isNew ? "" : `<button class="btn danger" id="fDel">Delete</button>`}</div><button class="btn gold" id="fSave">Save product</button>`;
   $("fSave").onclick = async () => {
     const name = $("fName").value.trim(); if (!name) return toast("Please give the product a name.", true);
     p.name = name; p.short = $("fShort").value.trim() || undefined; p.cat = $("fCat").value.trim() || "Other"; p.price = num($("fPrice").value);
     p.status = $("fStatus").value; p.desc = $("fDesc").value.trim();
+    p.cost = num($("fCost").value) || undefined;
+    const st = $("fStock").value.trim(); if (st === "") delete p.stock; else p.stock = num(st);
+    p.lowAt = num($("fLow").value) || 3;
     const ol = $("fOptL").value.trim(), ov = $("fOptV").value.split("\n").map(x => x.trim()).filter(Boolean);
     p.opt = ol && ov.length ? { label:ol, values:ov } : null;
     const more = {}; $("fMore").value.split("\n").forEach(l => { const k = l.indexOf(":"); if (k > 0) more[l.slice(0,k).trim()] = l.slice(k+1).trim(); });
@@ -506,9 +613,9 @@ function editProduct(i){
       } else p.image = newImage;
     }
     if (isNew) D.products.push(p); else D.products[i] = p;
-    dirty.products = true; saveLocal(); $("dlg").close(); renderProducts(); toast("Saved. Press “Publish to store” to make it live.");
+    dirty.products = true; saveLocal(); $("dlg").close(); render(); toast("Saved. Press “Publish” to make it live.");
   };
-  if (!isNew) $("fDel").onclick = () => { if (!confirm(`Delete ${p.name}?`)) return; D.products.splice(i, 1); dirty.products = true; saveLocal(); $("dlg").close(); renderProducts(); toast("Deleted. Publish to remove it from the store."); };
+  if (!isNew) $("fDel").onclick = () => { if (!confirm(`Delete ${p.name}?`)) return; D.products.splice(i, 1); dirty.products = true; saveLocal(); $("dlg").close(); render(); toast("Deleted. Publish to remove it from the store."); };
   $("dlg").showModal();
 }
 function resize(file, max, q){
@@ -519,37 +626,164 @@ function resize(file, max, q){
   });
 }
 
+/* ---------- inventory ---------- */
+function renderInventory(){
+  const tracked = D.products.filter(p => typeof p.stock === "number");
+  const value = tracked.reduce((s,p) => s + (p.stock || 0) * (p.cost || 0), 0);
+  const retail = tracked.reduce((s,p) => s + (p.stock || 0) * (p.price || 0), 0);
+  $("main").innerHTML = `
+    <div class="toolbar"><div><span class="eyebrow">Stock and costs</span><h2>Inventory</h2></div><button class="btn gold" id="iPub" ${dirty.products ? "" : "disabled"}>Publish to store</button></div>
+    <div class="cards">
+      <div class="stat"><span class="eyebrow">Items in stock</span><b>${tracked.reduce((s,p) => s + (p.stock || 0), 0)}</b><span class="muted small">${tracked.length} tracked products</span></div>
+      <div class="stat"><span class="eyebrow">Stock value (cost)</span><b>${tzs(value)}</b><span class="muted small">what you paid</span></div>
+      <div class="stat"><span class="eyebrow">Stock value (retail)</span><b>${tzs(retail)}</b><span class="muted small">if it all sells</span></div>
+      <div class="stat"><span class="eyebrow">Low or out</span><b>${lowStock().length}</b><span class="muted small">need restocking</span></div>
+    </div>
+    <p class="note">Leave <b>Stock</b> empty for pre-order products (always available). Enter a number for items you hold; it goes down automatically when an order is marked <b>Paid</b>, and the store shows “Only 3 left” or “Sold out” by itself.</p>
+    <div class="panel"><div class="tscroll"><table class="mobile-cards"><thead><tr><th>Product</th><th class="num">Price</th><th>Cost price</th><th>Margin</th><th>Stock</th><th></th></tr></thead><tbody>
+      ${D.products.map((p,i) => { const m = p.cost && p.price ? Math.round((p.price - p.cost) / p.price * 100) : null; return `<tr>
+        <td><b>${esc(p.name)}</b><br><span class="muted small">${esc(p.cat)}</span></td><td class="num">${tzs(p.price)}</td>
+        <td><input class="cell-in" data-i="${i}" data-k="cost" inputmode="numeric" value="${esc(p.cost || "")}" placeholder="—" aria-label="Cost price of ${esc(p.name)}"></td>
+        <td>${m === null ? `<span class="muted small">—</span>` : `<span class="pill ${m < 20 ? "warn" : "ok"}">${m}%</span>`}</td>
+        <td><input class="cell-in" data-i="${i}" data-k="stock" inputmode="numeric" value="${typeof p.stock === "number" ? p.stock : ""}" placeholder="Unlimited" aria-label="Stock of ${esc(p.name)}"></td>
+        <td>${stockLabel(p)}</td></tr>`; }).join("")}
+    </tbody></table></div></div>`;
+  $("iPub").onclick = () => publishProducts();
+  $("main").querySelectorAll(".cell-in").forEach(inp => inp.onchange = () => {
+    const p = D.products[+inp.dataset.i];
+    if (inp.dataset.k === "stock"){ if (inp.value.trim() === "") delete p.stock; else p.stock = num(inp.value); }
+    else p.cost = num(inp.value) || undefined;
+    dirty.products = true; saveLocal(); render();
+  });
+}
+
+/* ---------- discounts ---------- */
+function renderDiscounts(){
+  const list = D.config.discounts;
+  const uses = code => D.orders.filter(o => (o.discountCode || "").toUpperCase() === code.toUpperCase());
+  $("main").innerHTML = `
+    <div class="toolbar"><div><span class="eyebrow">Promotions</span><h2>Discount codes</h2></div><div class="row"><button class="btn" id="dAdd">New code</button><button class="btn gold" id="dPub" ${dirty.config ? "" : "disabled"}>Publish codes</button></div></div>
+    <p class="note">Customers type a code in their bag. The discount appears in their WhatsApp order, and is filled in automatically when you paste the order here.</p>
+    <div class="panel">${list.length ? `<div class="tscroll"><table class="mobile-cards"><thead><tr><th>Code</th><th>Discount</th><th>Minimum order</th><th>Expires</th><th>Used</th><th>Active</th><th></th></tr></thead><tbody>
+      ${list.map((d,i) => { const u = uses(d.code); const expired = d.expires && d.expires < today(); return `<tr>
+        <td><b>${esc(d.code)}</b></td><td>${d.type === "percent" ? esc(d.value) + "%" : tzs(d.value)}</td><td>${d.min ? tzs(d.min) : "—"}</td>
+        <td>${d.expires ? (expired ? `<span class="pill bad">Expired</span>` : fmtDate(d.expires)) : "Never"}</td>
+        <td>${u.length} order${u.length === 1 ? "" : "s"}<br><span class="muted small">${tzs(u.reduce((s,o) => s + num(o.discount), 0))} given</span></td>
+        <td><input type="checkbox" data-act="${i}" ${d.active !== false ? "checked" : ""} aria-label="${esc(d.code)} active"></td>
+        <td><button class="btn sm" data-de="${i}">Edit</button></td></tr>`; }).join("")}
+    </tbody></table></div>` : `<p class="empty">No discount codes yet. Try one like KARIBU10 for 10% off a first order.</p>`}</div>`;
+  $("dAdd").onclick = () => editDiscount(-1);
+  $("dPub").onclick = publishConfig;
+  $("main").querySelectorAll("[data-de]").forEach(b => b.onclick = () => editDiscount(+b.dataset.de));
+  $("main").querySelectorAll("[data-act]").forEach(c => c.onchange = () => { list[+c.dataset.act].active = c.checked; dirty.config = true; saveLocal(); render(); });
+}
+function editDiscount(i){
+  const isNew = i < 0, d = isNew ? { code:"", type:"percent", value:10, min:0, expires:"", active:true } : { ...D.config.discounts[i] };
+  $("dlgTitle").textContent = isNew ? "New discount code" : "Edit " + d.code;
+  $("dlgBody").innerHTML = `<div class="form">
+    <label>Code<input id="dCode" value="${esc(d.code)}" placeholder="KARIBU10" style="text-transform:uppercase"></label>
+    <div class="g2"><label>Type<select id="dType"><option value="percent" ${d.type === "percent" ? "selected" : ""}>Percentage off</option><option value="fixed" ${d.type === "fixed" ? "selected" : ""}>Amount off (TSh)</option></select></label><label>Value<input id="dVal" inputmode="numeric" value="${esc(d.value)}"></label></div>
+    <div class="g2"><label>Minimum order (TSh)<input id="dMin" inputmode="numeric" value="${esc(d.min || "")}" placeholder="None"></label><label>Expires on<input id="dExp" type="date" value="${esc(d.expires || "")}"></label></div></div>`;
+  $("dlgFoot").innerHTML = `<div>${isNew ? "" : `<button class="btn danger" id="dDel">Delete</button>`}</div><button class="btn gold" id="dSave">Save code</button>`;
+  $("dSave").onclick = () => {
+    const code = $("dCode").value.trim().toUpperCase().replace(/\s+/g, ""); if (!code) return toast("Please enter a code.", true);
+    if (D.config.discounts.some((x,k) => k !== i && x.code.toUpperCase() === code)) return toast("That code already exists.", true);
+    const n = { code, type:$("dType").value, value:num($("dVal").value), min:num($("dMin").value), expires:$("dExp").value, active:d.active !== false };
+    if (n.type === "percent" && (n.value <= 0 || n.value > 90)) return toast("Use a percentage between 1 and 90.", true);
+    if (isNew) D.config.discounts.push(n); else D.config.discounts[i] = n;
+    dirty.config = true; saveLocal(); $("dlg").close(); render(); toast("Saved. Press “Publish codes” to switch it on in the store.");
+  };
+  if (!isNew) $("dDel").onclick = () => { if (!confirm(`Delete ${d.code}?`)) return; D.config.discounts.splice(i, 1); dirty.config = true; saveLocal(); $("dlg").close(); render(); };
+  $("dlg").showModal();
+}
+
+/* ---------- customers ---------- */
+function customers(){
+  const by = {};
+  D.orders.forEach(o => { const k = String(o.phone || o.name || "unknown").replace(/\D/g, "") || o.name || "unknown"; const c = by[k] = by[k] || { key:k, name:o.name, phone:o.phone, area:o.area, orders:[], spent:0, last:"" }; c.orders.push(o); if (PAID.includes(o.status)) c.spent += num(o.total); if ((o.date || "") > c.last){ c.last = o.date; c.name = o.name || c.name; c.area = o.area || c.area; } });
+  return Object.values(by).sort((a,b) => b.spent - a.spent);
+}
+function renderCustomers(){
+  const list = customers(), repeat = list.filter(c => c.orders.length > 1).length;
+  $("main").innerHTML = `
+    <div class="toolbar"><div><span class="eyebrow">${list.length} customers</span><h2>Customers</h2></div></div>
+    <div class="cards">
+      <div class="stat"><span class="eyebrow">Customers</span><b>${list.length}</b></div>
+      <div class="stat"><span class="eyebrow">Came back</span><b>${list.length ? Math.round(repeat / list.length * 100) : 0}%</b><span class="muted small">${repeat} ordered more than once</span></div>
+      <div class="stat"><span class="eyebrow">Average spend</span><b>${tzs(list.length ? list.reduce((s,c) => s + c.spent, 0) / list.length : 0)}</b></div>
+    </div>
+    <div class="panel">${list.length ? `<div class="tscroll"><table class="mobile-cards"><thead><tr><th>Name</th><th>Phone</th><th>Area</th><th class="num">Orders</th><th class="num">Spent</th><th>Last order</th></tr></thead><tbody>
+      ${list.map((c,i) => `<tr class="click" data-c="${i}"><td><b>${esc(c.name || "—")}</b></td><td class="small">${esc(c.phone || "")}</td><td class="small">${esc(c.area || "")}</td><td class="num">${c.orders.length}</td><td class="num">${tzs(c.spent)}</td><td class="small">${fmtDate(c.last)}</td></tr>`).join("")}
+    </tbody></table></div>` : `<p class="empty">Customers appear here from your orders.</p>`}</div>`;
+  $("main").querySelectorAll("[data-c]").forEach(r => r.onclick = () => {
+    const c = list[+r.dataset.c];
+    $("dlgTitle").textContent = c.name || "Customer";
+    $("dlgBody").innerHTML = `<div class="cards"><div class="stat"><span class="eyebrow">Spent</span><b>${tzs(c.spent)}</b></div><div class="stat"><span class="eyebrow">Orders</span><b>${c.orders.length}</b></div></div>
+      <p>${esc(c.phone || "")}<br>${esc(c.area || "")}</p>
+      <table><tbody>${c.orders.sort((a,b) => (b.date || "").localeCompare(a.date || "")).map(o => `<tr class="click" data-o="${esc(o.id)}"><td><b>${esc(o.id)}</b><br><span class="muted small">${fmtDate(o.date)}</span></td><td class="small">${(o.items || []).map(i => esc(i.qty + " × " + i.name)).join("<br>")}</td><td class="num">${tzs(o.total)}<br>${statusPill(o.status)}</td></tr>`).join("")}</tbody></table>`;
+    $("dlgFoot").innerHTML = `<span></span>${c.phone ? `<a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/${esc(String(c.phone).replace(/\D/g,""))}">WhatsApp ${esc((c.name || "").split(" ")[0])}</a>` : ""}`;
+    $("dlgBody").querySelectorAll("[data-o]").forEach(x => x.onclick = () => { $("dlg").close(); editOrder(D.orders.find(o => o.id === x.dataset.o)); });
+    $("dlg").showModal();
+  });
+}
+
+/* ---------- analytics ---------- */
+function renderAnalytics(){
+  const list = D.orders.filter(o => inRange(o, range)), paid = paidOrders(list), rev = revenue(list);
+  const cost = paid.reduce((s,o) => s + (o.items || []).reduce((c,i) => c + itemCost(i), 0), 0);
+  const deliv = paid.reduce((s,o) => s + num(o.delivery), 0);
+  const byCat = {}, byProd = {}, byArea = {};
+  paid.forEach(o => { (o.items || []).forEach(i => { const p = findProduct(i.name); const cat = p ? p.cat : "Other"; byCat[cat] = (byCat[cat] || 0) + num(i.total); byProd[i.name] = byProd[i.name] || [0,0]; byProd[i.name][0] += +i.qty || 0; byProd[i.name][1] += num(i.total); }); byArea[o.area || "Unknown"] = (byArea[o.area || "Unknown"] || 0) + 1; });
+  const days = range || Math.max(30, Math.ceil((Date.now() - Math.min(...D.orders.map(o => new Date(o.date).getTime()), Date.now())) / 864e5) + 1);
+  const cancelled = list.filter(o => o.status === "Cancelled").length;
+  $("main").innerHTML = `
+    <div class="toolbar"><div><span class="eyebrow">Reports</span><h2>Analytics</h2></div>
+      <div class="chips" role="group" aria-label="Period">${[[7,"7 days"],[30,"30 days"],[90,"90 days"],[365,"12 months"],[0,"All time"]].map(([v,l]) => `<button data-r="${v}" aria-pressed="${v === range}">${l}</button>`).join("")}</div></div>
+    <div class="cards">
+      <div class="stat"><span class="eyebrow">Sales</span><b>${tzs(rev)}</b><span class="muted small">${paid.length} paid orders</span></div>
+      <div class="stat"><span class="eyebrow">Average order</span><b>${tzs(paid.length ? rev / paid.length : 0)}</b></div>
+      <div class="stat"><span class="eyebrow">Gross profit</span><b>${tzs(rev - deliv - cost)}</b><span class="muted small">${cost ? "after product costs" : "add cost prices in Inventory"}</span></div>
+      <div class="stat"><span class="eyebrow">Orders paid</span><b>${list.length ? Math.round(paid.length / list.length * 100) : 0}%</b><span class="muted small">${cancelled} cancelled</span></div>
+    </div>
+    <div class="panel"><h3>Sales per day</h3>${lineChart(series(D.orders, Math.min(days, 366)))}</div>
+    <div class="grid2">
+      <div class="panel"><h3>Sales by category</h3>${bars(Object.entries(byCat).sort((a,b) => b[1] - a[1]), tzs)}</div>
+      <div class="panel"><h3>Orders by area</h3>${bars(Object.entries(byArea).sort((a,b) => b[1] - a[1]).slice(0,8))}</div>
+    </div>
+    <div class="panel"><h3>Best-selling products</h3>${Object.keys(byProd).length ? `<div class="tscroll"><table><thead><tr><th>Product</th><th class="num">Sold</th><th class="num">Sales</th></tr></thead><tbody>${Object.entries(byProd).sort((a,b) => b[1][1] - a[1][1]).slice(0,10).map(([n,[q,v]]) => `<tr><td>${esc(n)}</td><td class="num">${q}</td><td class="num">${tzs(v)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">Appears once orders are paid.</p>`}</div>
+    <div class="panel"><h3>Store visitors</h3><p class="muted">To see how many people visit your store, switch on Cloudflare’s free visitor analytics: Cloudflare dashboard → <b>Workers & Pages</b> → your project → <b>Metrics</b> or <b>Web Analytics</b>. It counts visits without cookies, at no cost.</p></div>`;
+  $("main").querySelectorAll("[data-r]").forEach(b => b.onclick = () => { range = +b.dataset.r; renderAnalytics(); });
+}
+
 /* ---------- settings ---------- */
 function renderSettings(){
   const c = D.config;
   $("main").innerHTML = `
-    <div class="toolbar"><div><span class="eyebrow">Store</span><h2>Settings</h2></div><button class="btn gold" id="cPub" ${dirty.config ? "" : "disabled"}>${S.mode === "github" ? "Publish settings" : "Download config.json"}</button></div>
-    <div class="two">
+    <div class="toolbar"><div><span class="eyebrow">Store</span><h2>Settings</h2></div><button class="btn gold" id="cPub" ${dirty.config ? "" : "disabled"}>Publish settings</button></div>
+    <div class="grid2">
       <div class="panel form"><h3>Store details</h3>
         <label>Store name<input id="cName" value="${esc(c.name)}"></label>
         <label>WhatsApp number for orders<input id="cWa" value="${esc(c.whatsapp)}" inputmode="numeric"><span class="hint">Country code and number, no + or spaces. For example 255712345678.</span></label>
         <label>Lipa Namba / mobile money number<input id="cLipa" value="${esc(c.lipaNamba)}"></label>
-        <label>Pesapal payment link (optional)<input id="cPes" value="${esc(c.pesapalLink)}" placeholder="https://…"><span class="hint">Adding it switches on the “Pay by card” button.</span></label>
+        <label>Pesapal payment link (optional)<input id="cPes" value="${esc(c.pesapalLink)}" placeholder="https://…"><span class="hint">Switches on the “Pay by card” button.</span></label>
         <label>Exchange rate (TSh per 1 US$)<input id="cRate" inputmode="numeric" value="${esc(c.usdRate)}"></label>
       </div>
       <div class="panel form"><h3>Delivery areas and fees</h3>
-        <table class="items"><thead><tr><th>Area</th><th>Fee (TSh)</th><th></th></tr></thead><tbody id="cDel">${(c.delivery || []).map((d,k) => `<tr><td><input data-d="${k}" data-k="area" value="${esc(d.area)}" aria-label="Area"></td><td><input data-d="${k}" data-k="fee" value="${d.fee === null ? "" : esc(d.fee)}" placeholder="quote" aria-label="Fee"></td><td><button class="btn danger" data-dr="${k}" aria-label="Remove area">×</button></td></tr>`).join("")}</tbody></table>
+        <table class="items"><thead><tr><th>Area</th><th>Fee (TSh)</th><th></th></tr></thead><tbody id="cDel">${(c.delivery || []).map((d,k) => `<tr><td><input data-d="${k}" data-k="area" value="${esc(d.area)}" aria-label="Area"></td><td><input data-d="${k}" data-k="fee" value="${d.fee === null ? "" : esc(d.fee)}" placeholder="quote" aria-label="Fee"></td><td><button class="btn danger sm" data-dr="${k}" aria-label="Remove area">×</button></td></tr>`).join("")}</tbody></table>
         <p class="hint small muted">Leave the fee empty to quote it on WhatsApp.</p>
-        <div><button class="btn" id="cAddDel">Add area</button></div>
+        <div><button class="btn sm" id="cAddDel">Add area</button></div>
       </div>
     </div>
-    <div class="panel"><h3>Connection</h3><p class="muted small">${S.mode === "github" ? `Store: <b>${esc(S.user)}/${esc(S.repo)}</b> · Orders (private): <b>${esc(S.user)}/${esc(S.dataRepo)}</b> · Branch: ${esc(S.branch || "main")}` : "Working on this device only. Data is saved in this browser; use Export CSV to back up orders."}</p>
-      <div class="row"><button class="btn" id="cSwitch">Change connection</button><button class="btn danger" id="cOut">Sign out of this device</button></div></div>`;
+    <div class="panel"><h3>Account</h3><p class="muted small">${S.mode === "github" ? `Store: <b>${esc(S.user)}/${esc(S.repo)}</b> · Orders (private): <b>${esc(S.user)}/${esc(S.dataRepo)}</b> · Branch: ${esc(S.branch || "main")}` : "Working on this device only."}</p>
+      <div class="row"><button class="btn" id="cSwitch">Change connection or key</button><button class="btn" id="cBackup">Download full backup</button><button class="btn danger" id="cOut">Sign out of this device</button></div></div>`;
   const mark = () => { dirty.config = true; $("cPub").disabled = false; saveLocal(); };
   [["cName","name"],["cWa","whatsapp"],["cLipa","lipaNamba"],["cPes","pesapalLink"],["cRate","usdRate"]].forEach(([id,k]) => $(id).oninput = e => { c[k] = k === "usdRate" ? num(e.target.value) : k === "whatsapp" ? e.target.value.replace(/\D/g, "") : e.target.value.trim(); mark(); });
-  const bindDel = () => {
-    $("cDel").querySelectorAll("input").forEach(inp => inp.oninput = () => { const d = c.delivery[+inp.dataset.d]; if (inp.dataset.k === "fee") d.fee = inp.value.trim() === "" ? null : num(inp.value); else d.area = inp.value; mark(); });
-    $("cDel").querySelectorAll("[data-dr]").forEach(b => b.onclick = () => { c.delivery.splice(+b.dataset.dr, 1); mark(); renderSettings(); });
-  };
-  bindDel();
-  $("cAddDel").onclick = () => { (c.delivery = c.delivery || []).push({ area:"", fee:0 }); mark(); renderSettings(); };
+  $("cDel").querySelectorAll("input").forEach(inp => inp.oninput = () => { const d = c.delivery[+inp.dataset.d]; if (inp.dataset.k === "fee") d.fee = inp.value.trim() === "" ? null : num(inp.value); else d.area = inp.value; mark(); });
+  $("cDel").querySelectorAll("[data-dr]").forEach(b => b.onclick = () => { c.delivery.splice(+b.dataset.dr, 1); mark(); render(); });
+  $("cAddDel").onclick = () => { (c.delivery = c.delivery || []).push({ area:"", fee:0 }); mark(); render(); };
   $("cPub").onclick = publishConfig;
   $("cSwitch").onclick = () => setup();
+  $("cBackup").onclick = () => download("johari-backup-" + today() + ".json", JSON.stringify({ products:D.products, config:D.config, orders:D.orders }, null, 2));
   $("cOut").onclick = () => { if (!confirm("Sign out? Your access key will be removed from this device.")) return; localStorage.removeItem(KEY); S = null; location.reload(); };
 }
 

@@ -366,6 +366,27 @@ header.site .cur button[aria-pressed="true"]{color:#F2EBDD}
 .art img,.qc-art img,.thumb img,.fly img{width:100%;height:100%;object-fit:cover;display:block}
 .hanger img.photo{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px;box-shadow:0 22px 30px rgba(0,0,0,.55)}
 .stage img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+/* ===== 3D rail ===== */
+.rail3d{position:relative;margin-top:2.6rem;height:clamp(460px,72vh,640px);border-radius:4px;overflow:hidden;
+  background:radial-gradient(ellipse 50% 60% at 50% 18%,rgba(255,220,160,.28),transparent 70%),radial-gradient(ellipse 80% 40% at 50% 105%,rgba(0,0,0,.6),transparent 70%),repeating-linear-gradient(90deg,rgba(0,0,0,.25) 0 1px,transparent 1px 110px),linear-gradient(180deg,#1E130D,#0C0806 70%,#070504);
+  box-shadow:inset 0 0 0 1px rgba(201,164,76,.35),0 40px 60px -34px rgba(0,0,0,.6);color:#F2EBDD}
+.rail3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab}
+.rail3d canvas.grabbing{cursor:grabbing}
+.rail3d canvas.point{cursor:pointer}
+.rail-top{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:.68rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#E3C878;pointer-events:none}
+.rail-hint{position:absolute;top:42px;left:0;right:0;text-align:center;font-size:.8rem;color:#C9BFAF;pointer-events:none;transition:opacity .6s}
+.rail-info{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:min(560px,calc(100% - 2rem));display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.9rem 1.1rem;background:rgba(8,6,4,.72);border:1px solid rgba(201,164,76,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.rail-info .ri-text{min-width:0}
+.rail-info .ri-k{display:block;font-size:.64rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#E3C878}
+.rail-info .ri-n{display:block;font-family:"Bodoni Moda",Georgia,serif;font-size:1.25rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-info .ri-p{font-family:"Bodoni Moda",Georgia,serif;color:#D9CFBF}
+.rail-info .ri-b{display:flex;gap:.5rem;flex:none}
+.rail-info button{min-height:44px;padding:0 .9rem;border:1px solid rgba(227,200,120,.7);background:transparent;color:#F2EBDD;font:inherit;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.rail-info button.go{background:#C9A44C;border-color:#C9A44C;color:#0A1A2F}
+.rail-arrows button{position:absolute;top:44%;width:48px;height:48px;border:1px solid rgba(227,200,120,.6);background:rgba(8,6,4,.55);color:#F2EBDD;font-size:1.1rem;cursor:pointer}
+.rail-arrows .l{left:14px}.rail-arrows .r{right:14px}
+@media (max-width:600px){.rail-info{flex-direction:column;align-items:stretch;gap:.6rem}.rail-info .ri-b{justify-content:stretch}.rail-info .ri-b button{flex:1}.rail-arrows button{top:38%}}
+.disc-row{display:flex;gap:.6rem;align-items:end}.disc-row label{flex:1}
 </style>
 </head>
 <body>
@@ -571,7 +592,7 @@ const PRODUCTS = ((window.JM_DATA && window.JM_DATA.products) || [
     desc:"Pre-order a jersey for your club. Tell us the club and any name or number, and we will confirm availability and the final price on WhatsApp before you pay.",
     more:{ Fabric:"Breathable football jersey fabric", Fit:"Standard fit, see the size guide", Care:"Wash inside out in cold water; do not iron the print", Note:"Genuine jerseys only; we confirm the exact shirt with you first" },
     opt:{label:"Size", values:["S","M","L","XL","XXL"]} }
-]).filter(p => p.status !== "hidden");
+]).filter(p => p.status !== "hidden").map(p => (p.stock === 0 ? Object.assign({}, p, { status:"sold_out" }) : p));
 /* ==================================================================== */
 
 const $ = id => document.getElementById(id);
@@ -675,7 +696,7 @@ function renderFilters(){
 function renderGrid(){
   $("grid").innerHTML = PRODUCTS.filter(p => curCat === "All" || p.cat === curCat).map(p => `
     <article class="card">
-      <div class="art" style="background:${p.bg}">${visual(p)}<span class="badge">${p.status === "sold_out" ? "Sold out" : "Pre-order"}</span></div>
+      <div class="art" style="background:${p.bg}">${visual(p)}<span class="badge">${p.status === "sold_out" ? "Sold out" : (p.stock > 0 && p.stock <= 3 ? "Only " + p.stock + " left" : "Pre-order")}</span></div>
       <div class="card-body">
         <span class="cat">${esc(p.cat)}</span>
         <h3>${esc(p.name)}</h3>
@@ -830,12 +851,20 @@ function openFit(id){
 }
 
 /* bag */
-let form = { name:"", phone:"", area:"", address:"", note:"" };
+let form = { name:"", phone:"", area:"", address:"", note:"", code:"" };
+function activeCode(){
+  const c = (form.code || "").trim().toUpperCase(); if (!c) return null;
+  const d = (CONFIG.discounts || []).find(x => x.active !== false && String(x.code).toUpperCase() === c); if (!d) return null;
+  if (d.expires && new Date(d.expires + "T23:59:59") < new Date()) return null;
+  if (d.min && subtotal() < d.min) return null;
+  return d;
+}
+function discount(){ const d = activeCode(); if (!d) return 0; const s = subtotal(); return Math.min(s, Math.round(d.type === "percent" ? s * d.value / 100 : d.value)); }
 function updateCount(){ const n = cart.reduce((s,l) => s + l.qty, 0); $("cartCount").textContent = n; $("openCart").setAttribute("aria-label", `Open your bag, ${n} item${n === 1 ? "" : "s"}`); }
 const fee = () => { const d = CONFIG.delivery.find(d => d.area === form.area); return d ? d.fee : 0; };
 function renderCart(){
   if (!cart.length){ $("cartBody").innerHTML = `<div class="empty"><b>Your bag is empty.</b><p class="note" style="margin-bottom:1.4rem">The collection awaits.</p><a class="btn btn-dark" href="#collection" id="goShop">Explore the collection</a></div>`; $("goShop").onclick = () => $("cart").close(); return; }
-  const f = fee(), total = subtotal() + (f || 0);
+  const f = fee(), disc = discount(), total = subtotal() - disc + (f || 0);
   $("cartBody").innerHTML = cart.map((l,i) => { const p = byId(l.id); return `
     <div class="line">
       <div class="thumb" style="background:${p.bg}">${visual(p)}</div>
@@ -847,8 +876,10 @@ function renderCart(){
     <label>Delivery area<select id="cArea" aria-describedby="cErr"><option value="">Choose…</option>${CONFIG.delivery.map(d => `<option ${d.area === form.area ? "selected" : ""}>${esc(d.area)}</option>`).join("")}</select></label>
     <label>Address or pickup point<input id="cAddr" autocomplete="street-address" value="${esc(form.address)}"></label>
     <label>Note<textarea id="cNote">${esc(form.note)}</textarea></label>
+    ${(CONFIG.discounts || []).some(d => d.active !== false) ? `<div class="disc-row"><label>Discount code<input id="cCode" value="${esc(form.code)}" autocomplete="off"></label><button class="btn btn-ghost" id="cApply" type="button">Apply</button></div>` : ""}
     <div class="totals">
       <div><span>Subtotal</span><span>${money(subtotal())}</span></div>
+      ${disc ? `<div><span>Discount (${esc(activeCode().code)})</span><span>−${money(disc)}</span></div>` : ""}
       <div><span>Delivery</span><span>${form.area ? (f === null ? "Quoted on WhatsApp" : money(f)) : "Choose an area"}</span></div>
       <div class="grand"><span>Total</span><span>${money(total)}</span></div>
     </div>
@@ -862,6 +893,7 @@ function renderCart(){
   $("cArea").addEventListener("change", e => { form.area = e.target.value; rerender("cArea"); });
   $("cartBody").querySelectorAll("[data-inc]").forEach(b => b.onclick = () => { cart[b.dataset.inc].qty++; saveCart(); updateCount(); rerender(); });
   $("cartBody").querySelectorAll("[data-dec]").forEach(b => b.onclick = () => { const l = cart[b.dataset.dec]; l.qty > 1 ? l.qty-- : cart.splice(b.dataset.dec, 1); saveCart(); updateCount(); rerender(); });
+  if ($("cApply")) $("cApply").onclick = () => { form.code = $("cCode").value.trim(); rerender(); toast(activeCode() ? "Discount applied. Asante." : "That code isn’t valid for this order."); };
   $("cartBody").querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { cart.splice(b.dataset.rm, 1); saveCart(); updateCount(); rerender(); });
   $("sendWa").addEventListener("click", e => {
     const miss = [["cName", form.name.trim()], ["cPhone", form.phone.trim()], ["cArea", form.area]].filter(x => !x[1]);
@@ -875,7 +907,7 @@ function updateWa(){
   const a = $("sendWa"); if (!a) return;
   const f = fee();
   const lines = cart.map(l => { const p = byId(l.id); return `• ${p.name}${l.opt ? " (" + optName(l.opt) + ")" : ""} x${l.qty} = ${tzs(lineTotal(l))}`; }).join("\n");
-  const msg = `Hello ${CONFIG.name}, I would like to order:\n\n${lines}\n\nSubtotal: ${tzs(subtotal())}\nDelivery (${form.area || "-"}): ${f === null ? "please quote" : tzs(f || 0)}\nTotal: ${tzs(subtotal() + (f || 0))}\n\nName: ${form.name}\nPhone: ${form.phone}\nAddress: ${form.address || "-"}\nNote: ${form.note || "-"}`;
+  const msg = `Hello ${CONFIG.name}, I would like to order:\n\n${lines}\n\nSubtotal: ${tzs(subtotal())}${discount() ? `\nDiscount (${activeCode().code}): -${tzs(discount())}` : ""}\nDelivery (${form.area || "-"}): ${f === null ? "please quote" : tzs(f || 0)}\nTotal: ${tzs(subtotal() - discount() + (f || 0))}\n\nName: ${form.name}\nPhone: ${form.phone}\nAddress: ${form.address || "-"}\nNote: ${form.note || "-"}`;
   a.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg);
 }
 $("openCart").onclick = () => { renderCart(); $("cart").showModal(); };
@@ -1105,6 +1137,223 @@ let CHAPTERS = [
 })();
 </script>
 
+<script type="text/plain" id="app-rail">
+/* ===== 3D rail: drag along the rail, tap a piece to turn it around ===== */
+(function(){
+  const sec = $("wardrobe"), cab = $("cabinet");
+  if (!sec || !cab || !window.THREE) return;
+  const T = THREE;
+  const test = document.createElement("canvas");
+  if (!(test.getContext("webgl") || test.getContext("experimental-webgl"))) return;
+
+  /* every hanger on the rail */
+  const COLORWAYS = [["Ocean & gold","#0E5A6E","#E3C878",10],["Red & white","#B3202A","#F5F1E8",7],["Green & yellow","#1F6B3A","#F2C94C",9],["Black & gold","#151515","#D4AF37",11],["Sky & navy","#7FB8E6","#0A1A2F",23]];
+  const items = [];
+  PRODUCTS.filter(p => WARDROBE_CATS.includes(p.cat)).forEach(p => {
+    if (p.art === "jersey" && !p.image) COLORWAYS.forEach(([n,a,b,num]) => items.push({ p, kind:"jersey", a, b, num, label:n + " colourway" }));
+    else if (p.opt && p.opt.label === "Colour" && !p.image) p.opt.values.forEach(v => { const sw = SWATCH[v] || p.c; items.push({ p, kind:p.art, a:sw[0], b:sw[1], label:v, colour:v }); });
+    else items.push({ p, kind:p.art, a:p.c[0], b:p.c[1], label:"", num:10 });
+  });
+  items.sort((x, y) => (y.kind === "jersey") - (x.kind === "jersey"));
+  if (!items.length) return;
+
+  /* markup */
+  const wrap = document.createElement("div");
+  wrap.className = "rail3d"; wrap.id = "rail3d";
+  wrap.innerHTML = `<canvas id="railCanvas" role="img" aria-label="A rail of clothing and jerseys. Use the arrow buttons to browse."></canvas>
+    <div class="rail-top" aria-hidden="true">The Johari rail</div>
+    <div class="rail-hint" id="railHint">Drag to browse · tap a piece to turn it around</div>
+    <div class="rail-arrows"><button class="l" id="rPrev" aria-label="Previous piece">←</button><button class="r" id="rNext" aria-label="Next piece">→</button></div>
+    <div class="rail-info" id="railInfo" aria-live="polite"></div>`;
+  cab.parentNode.insertBefore(wrap, cab);
+  cab.hidden = true;
+  const cv = $("railCanvas");
+
+  /* ---------- fabric textures drawn on canvas ---------- */
+  const W = 512, H = 563, P = (x, y) => [x / 100 * W, (1 - y / 110) * H];
+  const SIL = {
+    jersey:[[30,100],[50,92,70,100],[88,96],[100,80],[90,68],[80,74],[80,2],[50,0,20,2],[20,74],[10,68],[0,80],[12,96]],
+    shirt:[[31,100],[50,93,69,100],[86,96],[96,90],[100,30],[91,29],[82,74],[82,2],[50,0,18,2],[18,74],[9,29],[0,30],[4,90],[14,96]],
+    fabric:[[8,104],[92,104],[97,8],[85,2,72,7],[60,2,50,6],[40,2,28,7],[15,2,3,8]]
+  };
+  const silOf = kind => kind === "fabric" ? SIL.fabric : kind === "shirt" ? SIL.shirt : SIL.jersey;
+  function path(ctx, kind){
+    const s = silOf(kind); ctx.beginPath();
+    s.forEach((pt, i) => { if (pt.length === 4){ const [cx,cy] = P(pt[0],pt[1]), [x,y] = P(pt[2],pt[3]); ctx.quadraticCurveTo(cx,cy,x,y); } else { const [x,y] = P(pt[0],pt[1]); i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); } });
+    ctx.closePath();
+  }
+  function shade(ctx){
+    let g = ctx.createLinearGradient(0,0,W,0);
+    g.addColorStop(0,"rgba(0,0,0,.42)"); g.addColorStop(.18,"rgba(0,0,0,.05)"); g.addColorStop(.42,"rgba(255,255,255,.08)"); g.addColorStop(.6,"rgba(0,0,0,.06)"); g.addColorStop(.82,"rgba(0,0,0,.08)"); g.addColorStop(1,"rgba(0,0,0,.45)");
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,"rgba(255,255,255,.12)"); g.addColorStop(.4,"rgba(255,255,255,0)"); g.addColorStop(1,"rgba(0,0,0,.3)");
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle = "rgba(0,0,0,.08)"; ctx.lineWidth = 6;
+    [[.3,.35,.36,.9],[.62,.4,.7,.95],[.46,.55,.5,1]].forEach(([x1,y1,x2,y2]) => { ctx.beginPath(); ctx.moveTo(x1*W,y1*H); ctx.quadraticCurveTo((x1+x2)/2*W+18,(y1+y2)/2*H,x2*W,y2*H); ctx.stroke(); });
+  }
+  function make(item, side, done){
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const ctx = c.getContext("2d"), { a, b, kind } = item;
+    const finish = () => { ctx.restore(); path(ctx, kind); ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = 3; ctx.stroke(); done && done(); };
+    ctx.save(); path(ctx, kind); ctx.clip();
+    if (item.p.image){
+      const img = new Image(); img.crossOrigin = "anonymous";
+      ctx.fillStyle = item.p.bg || "#222"; ctx.fillRect(0,0,W,H);
+      img.onload = () => { const k = Math.max(W / img.width, H / img.height); ctx.drawImage(img, (W - img.width*k)/2, (H - img.height*k)/2, img.width*k, img.height*k); shade(ctx); finish(); };
+      img.onerror = () => finish();
+      img.src = item.p.image; return c;
+    }
+    ctx.fillStyle = a; ctx.fillRect(0,0,W,H);
+    if (kind === "jersey"){
+      ctx.fillStyle = b; ctx.globalAlpha = .9;
+      [[[30,100],[12,96],[0,80],[10,68],[22,76]],[[70,100],[88,96],[100,80],[90,68],[78,76]]].forEach(poly => { ctx.beginPath(); poly.forEach(([x,y],i) => { const [px,py] = P(x,y); i ? ctx.lineTo(px,py) : ctx.moveTo(px,py); }); ctx.closePath(); ctx.fill(); });
+      ctx.globalAlpha = 1; let [x,y] = P(20,72); let [x2,y2] = P(25,2); ctx.fillRect(x,y,x2-x,y2-y); [x,y] = P(75,72); [x2,y2] = P(80,2); ctx.fillRect(x,y,x2-x,y2-y);
+      ctx.strokeStyle = a; ctx.lineWidth = 8; ctx.beginPath(); let [s1,s2] = P(1,79), [s3,s4] = P(10,67); ctx.moveTo(s1,s2); ctx.lineTo(s3,s4); [s1,s2] = P(99,79); [s3,s4] = P(90,67); ctx.moveTo(s1,s2); ctx.lineTo(s3,s4); ctx.stroke();
+      ctx.strokeStyle = b; ctx.lineWidth = 16; ctx.beginPath(); const [n1,n2] = P(30,101), [nc1,nc2] = P(50,90), [n3,n4] = P(70,101); ctx.moveTo(n1,n2); ctx.quadraticCurveTo(nc1,nc2,n3,n4); ctx.stroke();
+      ctx.fillStyle = "rgba(0,0,0,.09)"; for (let yy = 0; yy < H; yy += 7) for (let xx = (yy/7 % 2) * 3.5; xx < W; xx += 7) ctx.fillRect(xx, yy, 2, 2);
+      ctx.fillStyle = b; ctx.textAlign = "center";
+      if (side === "front"){
+        const [cx,cy] = P(36,80); ctx.beginPath(); ctx.moveTo(cx-20,cy-22); ctx.lineTo(cx+20,cy-22); ctx.lineTo(cx+20,cy+4); ctx.quadraticCurveTo(cx,cy+28,cx-20,cy+4); ctx.closePath(); ctx.lineWidth = 4; ctx.strokeStyle = b; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx-9,cy-6); ctx.lineTo(cx,cy-14); ctx.lineTo(cx+9,cy-6); ctx.lineTo(cx,cy+8); ctx.closePath(); ctx.fill();
+        const [mx,my] = P(64,80); ctx.font = "700 22px Arial, sans-serif"; ctx.fillText("JOHARI", mx, my + 8);
+        const [fx,fy] = P(50,52); ctx.font = "700 64px Arial, sans-serif"; ctx.globalAlpha = .9; ctx.fillText(String(item.num || 10), fx, fy); ctx.globalAlpha = 1;
+      } else {
+        const [tx,ty] = P(50,84); ctx.font = "700 40px Arial, sans-serif"; ctx.fillText("JOHARI", tx, ty);
+        const [bx,by] = P(50,40); ctx.font = "700 190px Arial, sans-serif"; ctx.lineWidth = 6; ctx.strokeStyle = "rgba(0,0,0,.35)"; ctx.strokeText(String(item.num || 10), bx, by); ctx.fillText(String(item.num || 10), bx, by);
+      }
+    } else if (kind === "shirt"){
+      ctx.strokeStyle = "rgba(0,0,0,.18)"; ctx.lineWidth = 2;
+      if (side === "front"){
+        let [x,y] = P(47,92); let [x2,y2] = P(53,2); ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(x,y,x2-x,y2-y); ctx.strokeRect(x,y,x2-x,y2-y);
+        ctx.fillStyle = b; for (let k = 0; k < 6; k++){ const [bx,by] = P(50, 84 - k*14); ctx.beginPath(); ctx.arc(bx,by,6,0,7); ctx.fill(); }
+        [x,y] = P(26,74); ctx.strokeRect(x,y,60,66);
+        ctx.fillStyle = a; ctx.beginPath(); let p1 = P(31,100), p2 = P(50,86), p3 = P(38,82); ctx.moveTo(...p1); ctx.lineTo(...p2); ctx.lineTo(...p3); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); p1 = P(69,100); p3 = P(62,82); ctx.moveTo(...p1); ctx.lineTo(...p2); ctx.lineTo(...p3); ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath(); let [y1,y2] = [P(18,84), P(82,84)]; ctx.moveTo(...y1); ctx.quadraticCurveTo(W/2, P(50,80)[1], ...y2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(...P(50,82)); ctx.lineTo(...P(50,62)); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.moveTo(...P(1,36)); ctx.lineTo(...P(10,35)); ctx.moveTo(...P(99,36)); ctx.lineTo(...P(90,35)); ctx.stroke();
+    } else if (item.p.id === "kikoi" || kind === "fabric" && /kikoi/i.test(item.p.name)){
+      ctx.fillStyle = b; [[10,6],[22,2],[44,8],[64,2],[80,6]].forEach(([x,w]) => { const [px] = P(x,0); ctx.fillRect(px,0,w/100*W,H); });
+      ctx.fillStyle = "#C9A44C"; [[18,1],[35,1],[58,1],[73,1]].forEach(([x,w]) => { const [px] = P(x,0); ctx.fillRect(px,0,w/100*W,H); });
+      ctx.fillStyle = "rgba(0,0,0,.18)"; const [, by] = P(0,12); ctx.fillRect(0,by,W,H-by);
+    } else {
+      ctx.fillStyle = b; ctx.fillRect(0,0,W,H);
+      let [x,y] = P(15,96), [x2,y2] = P(85,14); ctx.fillStyle = a; ctx.fillRect(x,y,x2-x,y2-y);
+      ctx.fillStyle = a; for (let yy = 92; yy > 16; yy -= 9){ const [lx,ly] = P(10,yy), [rx] = P(90,yy); ctx.beginPath(); ctx.moveTo(lx,ly-7); ctx.lineTo(lx+6,ly); ctx.lineTo(lx,ly+7); ctx.lineTo(lx-6,ly); ctx.fill(); ctx.beginPath(); ctx.moveTo(rx,ly-7); ctx.lineTo(rx+6,ly); ctx.lineTo(rx,ly+7); ctx.lineTo(rx-6,ly); ctx.fill(); }
+      const [cx,cy] = P(50,60); ctx.strokeStyle = b; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(cx,cy,78,0,7); ctx.stroke();
+      ctx.fillStyle = b; for (let k = 0; k < 8; k++){ ctx.save(); ctx.translate(cx,cy); ctx.rotate(k * Math.PI / 4); ctx.beginPath(); ctx.ellipse(0,-42,11,26,0,0,7); ctx.fill(); ctx.restore(); }
+      ctx.beginPath(); ctx.arc(cx,cy,14,0,7); ctx.fill();
+      const [tx,ty] = P(50,24); ctx.fillRect(tx - 170, ty - 22, 340, 40); ctx.fillStyle = a; ctx.font = "700 24px Arial, sans-serif"; ctx.textAlign = "center"; ctx.fillText("MAPENZI NI KIKOHOZI", tx, ty + 7);
+    }
+    shade(ctx); finish(); return c;
+  }
+
+  /* ---------- scene ---------- */
+  const renderer = new T.WebGLRenderer({ canvas:cv, antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputEncoding = T.sRGBEncoding;
+  const scene = new T.Scene();
+  const camera = new T.PerspectiveCamera(30, 1, .1, 50);
+  scene.add(new T.HemisphereLight(0xFFE9C4, 0x1A0F08, .75));
+  const key = new T.DirectionalLight(0xFFF1D6, .95); key.position.set(1.5, 3, 4); scene.add(key);
+  const rim = new T.DirectionalLight(0x9FD8E4, .35); rim.position.set(-3, 1, -2); scene.add(rim);
+  const SPACING = 1.18, RAIL_Y = .62;
+  const brass = new T.MeshStandardMaterial({ color:0xD9B45A, metalness:.85, roughness:.28 });
+  const chrome = new T.MeshStandardMaterial({ color:0xE8E8E8, metalness:.95, roughness:.22 });
+  const wood = new T.MeshStandardMaterial({ color:0xA8703F, metalness:0, roughness:.55 });
+  const railLen = (items.length - 1) * SPACING + 8;
+  const rail = new T.Mesh(new T.CylinderGeometry(.028, .028, railLen, 20), brass);
+  rail.rotation.z = Math.PI / 2; rail.position.set((items.length - 1) * SPACING / 2, RAIL_Y, 0); scene.add(rail);
+  const track = new T.Group(); scene.add(track);
+
+  const bend = (g, cloth) => { const p = g.attributes.position; for (let i = 0; i < p.count; i++){ const x = p.getX(i), y = p.getY(i); let z = .075 * (1 - Math.pow(2 * x, 2)); if (cloth) z += .022 * Math.sin(x * Math.PI * 7) * (.6 - y) ; p.setZ(i, Math.max(z, -.01)); } g.computeVertexNormals(); return g; };
+  const hookCurve = new T.CatmullRomCurve3([new T.Vector3(0,0,0), new T.Vector3(0,.12,0), new T.Vector3(0,.2,-.035), new T.Vector3(0,.245,0), new T.Vector3(0,.21,.045), new T.Vector3(0,.16,.04)]);
+  const barCurve = new T.QuadraticBezierCurve3(new T.Vector3(-.46,-.06,0), new T.Vector3(0,.07,0), new T.Vector3(.46,-.06,0));
+  const hookGeo = new T.TubeGeometry(hookCurve, 30, .009, 8), barGeo = new T.TubeGeometry(barCurve, 30, .022, 10);
+
+  const pivots = items.map((it, i) => {
+    const pivot = new T.Group(); pivot.position.set(i * SPACING, RAIL_Y, 0);
+    const turn = new T.Group(); turn.position.y = -.235; pivot.add(turn);
+    const hook = new T.Mesh(hookGeo, chrome); turn.add(hook);
+    const bar = new T.Mesh(barGeo, wood); turn.add(bar);
+    const isCloth = it.kind === "fabric";
+    const mk = side => { let tex = null; const cnv = make(it, side, () => { if (tex) tex.needsUpdate = true; }); tex = new T.CanvasTexture(cnv); tex.encoding = T.sRGBEncoding; tex.anisotropy = 4; return new T.MeshStandardMaterial({ map:tex, roughness:.86, metalness:0, alphaTest:.5, transparent:false }); };
+    const geo = () => bend(new T.PlaneGeometry(1, 1.1, 26, 26), isCloth);
+    const front = new T.Mesh(geo(), mk("front")); front.position.set(0, isCloth ? -.49 : -.45, .012);
+    const back = new T.Mesh(geo(), mk("back")); back.rotation.y = Math.PI; back.position.set(0, isCloth ? -.49 : -.45, -.012);
+    turn.add(front, back);
+    track.add(pivot);
+    return { pivot, turn, it, rot:0, rotT:0, swing:0, swingV:0, lift:0, liftT:0, hits:[front, back] };
+  });
+
+  /* ---------- interaction ---------- */
+  let offset = items.length > 2 ? SPACING : 0, vel = 0, dragging = false, sx = 0, lastX = 0, moved = 0, sel = items.length > 2 ? 1 : 0, hover = -1, prevVel = 0, idle = 0;
+  const maxOff = (items.length - 1) * SPACING;
+  const ray = new T.Raycaster(), mouse = new T.Vector2();
+  const pxToWorld = () => { const d = camera.position.z, h = 2 * Math.tan(camera.fov * Math.PI / 360) * d; return h / cv.clientHeight; };
+  function pick(ev){
+    const r = cv.getBoundingClientRect(); mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(mouse, camera);
+    const hit = ray.intersectObjects(pivots.flatMap(p => p.hits), false)[0];
+    return hit ? pivots.findIndex(p => p.hits.includes(hit.object)) : -1;
+  }
+  cv.addEventListener("pointerdown", e => { dragging = true; sx = lastX = e.clientX; moved = 0; vel = 0; cv.setPointerCapture(e.pointerId); cv.classList.add("grabbing"); });
+  cv.addEventListener("pointermove", e => {
+    if (dragging){ const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx); const d = -dx * pxToWorld(); offset += d; vel = d; $("railHint").style.opacity = 0; }
+    else { const h = pick(e); if (h !== hover){ hover = h; cv.classList.toggle("point", h >= 0); } }
+  });
+  const end = e => {
+    if (!dragging) return; dragging = false; cv.classList.remove("grabbing");
+    if (moved < 6){ const h = pick(e); if (h >= 0){ if (h === sel) toggle(h); else select(h, true); } }
+  };
+  cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", () => { dragging = false; cv.classList.remove("grabbing"); });
+  cv.addEventListener("pointerleave", () => { hover = -1; cv.classList.remove("point"); });
+  cv.addEventListener("wheel", e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)){ e.preventDefault(); offset += e.deltaX * .004; vel = e.deltaX * .004; } }, { passive:false });
+  function toggle(i){ const p = pivots[i]; p.rotT = p.rotT ? 0 : Math.PI; info(); }
+  function select(i, snap){ sel = Math.max(0, Math.min(items.length - 1, i)); if (snap){ vel = 0; target = sel * SPACING; } info(); }
+  let target = null;
+  $("rPrev").onclick = () => select(sel - 1, true);
+  $("rNext").onclick = () => select(sel + 1, true);
+  function info(){
+    const it = items[sel], p = it.p, turned = pivots[sel].rotT !== 0;
+    $("railInfo").innerHTML = `<div class="ri-text"><span class="ri-k">${esc(p.cat)}${it.label ? " · " + esc(it.label) : ""}</span><span class="ri-n">${esc(p.name)}</span><span class="ri-p">${(p.opt ? "From " : "") + money(p.price)}</span></div>
+      <div class="ri-b"><button id="riTurn">${turned ? "Show front" : "Turn around"}</button><button class="go" id="riGo">${p.status === "sold_out" ? "Sold out" : "Choose size"}</button></div>`;
+    $("riTurn").onclick = () => toggle(sel);
+    $("riGo").onclick = () => { openItem(p.id); if (it.colour){ const b = document.querySelector(`#pdBody [data-col="${CSS.escape(it.colour)}"]`); if (b) b.click(); } };
+  }
+  ["curTZS","curUSD"].forEach(id => $(id) && $(id).addEventListener("click", () => setTimeout(info)));
+
+  /* ---------- loop ---------- */
+  function size(){ const w = cv.clientWidth, h = cv.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.position.set(0, -.02, w < 700 ? 5.1 : 4.5); camera.lookAt(0, -.2, 0); camera.updateProjectionMatrix(); }
+  size(); addEventListener("resize", size);
+  info();
+  let last = performance.now();
+  function loop(now){
+    requestAnimationFrame(loop);
+    const r = wrap.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (!dragging){
+      if (target !== null){ offset += (target - offset) * .12; if (Math.abs(target - offset) < .002){ offset = target; target = null; } vel = 0; }
+      else { offset += vel; vel *= .92; if (Math.abs(vel) < .0015){ const near = Math.round(offset / SPACING) * SPACING; offset += (near - offset) * .08; } }
+    }
+    if (offset < 0) offset += (0 - offset) * .25; if (offset > maxOff) offset += (maxOff - offset) * .25;
+    const ns = Math.round(Math.max(0, Math.min(maxOff, offset)) / SPACING); if (ns !== sel && target === null){ sel = ns; info(); }
+    track.position.x = -offset; rail.position.x = (items.length - 1) * SPACING / 2 - offset;
+    const acc = reduceMotion ? 0 : (vel - prevVel); prevVel = vel;
+    pivots.forEach((p, i) => {
+      p.swingV += (-p.swing * 30 - p.swingV * 3.2) * dt + acc * (55 + (i % 3) * 6);
+      p.swing += p.swingV * dt; p.pivot.rotation.z = Math.max(-.5, Math.min(.5, p.swing));
+      p.rot += (p.rotT - p.rot) * (reduceMotion ? 1 : .09); p.turn.rotation.y = p.rot;
+      p.liftT = (i === hover && !dragging) ? .04 : 0; p.lift += (p.liftT - p.lift) * .15; p.pivot.position.y = RAIL_Y + p.lift;
+    });
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+
 <script>
 /* Loads products.json and config.json (edited from admin.html), then starts the store. */
 (async () => {
@@ -1112,7 +1361,7 @@ let CHAPTERS = [
     const [c, p] = await Promise.all([fetch("config.json", { cache:"no-store" }), fetch("products.json", { cache:"no-store" })]);
     if (c.ok && p.ok) window.JM_DATA = { config: await c.json(), products: await p.json() };
   } catch(e){ /* opened as a single file: the built-in copy is used */ }
-  for (const id of ["app-main", "app-cine"]){
+  for (const id of ["app-main", "app-cine", "app-rail"]){
     const s = document.createElement("script");
     s.textContent = document.getElementById(id).textContent;
     document.body.appendChild(s);
